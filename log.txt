@@ -1,0 +1,167 @@
+{'first_name': 'Omar', 'last_name': 'Abdelbaqi', 'title': 'Technology Manager', 'company': 'Eaton Corp.', 'alumni': False, 'year': None, 'degree': '', 'email': 'OmarAbdelbaqi@eaton.com', 'password': 'abdelbaqi2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:48] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Cameron', 'last_name': 'Ahles', 'title': 'Mechanical Engineer', 'company': 'Generac Power Systems', 'alumni': True, 'year': None, 'degree': 'Mechanical Engineer, December of 2022', 'email': 'cameron.ahles@gmail.com', 'password': 'ahles2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:48] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Hadi', 'last_name': 'Akbari', 'title': 'Senior specialist control and embedded', 'company': 'Eaton', 'alumni': True, 'year': None, 'degree': 'PhD in power electronics', 'email': 'hadiakbariha@gmail.com', 'password': 'akbari2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:48] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Amber', 'last_name': 'Bakkum', 'title': 'Dr. ', 'company': 'University School of Milwaukee', 'alumni': False, 'year': None, 'degree': '', 'email': 'abakkum@usm.org', 'password': 'bakkum2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:49] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'John', 'last_name': 'Bernd', 'title': 'Sr. Product Manager', 'company': 'Dividend Finance ', 'alumni': True, 'year': None, 'degree': 'B.S. Computer Science, 1992', 'email': 'jbernd18@live.com', 'password': 'bernd2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:49] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Md Multan', 'last_name': 'Biswas', 'title': 'Lead Power Electronics Engineer', 'company': 'Eaton Corporation', 'alumni': False, 'year': None, 'degree': '', 'email': 'multanbiswas@eaton.com', 'password': 'biswas2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:49] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Donovan', 'last_name': 'Brocker', 'title': 'Assistant Professor', 'company': 'Milwaukee School of Engineering', 'alumni': True, 'year': None, 'degree': 'Electrical Engineering and Physics, 2010', 'email': 'donovanbrocker@gmail.com', 'password': 'brocker2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:49] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Suzanne', 'last_name': 'Caulfield', 'title': 'Student', 'company': 'Marquette University', 'alumni': True, 'year': None, 'degree': 'MS 2000\nPh.D. 2007', 'email': 'suzanne.caulfield@marquette.edu', 'password': 'caulfield2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:49] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Laxmi Manogna', 'last_name': 'Chennam', 'title': 'Project Manager', 'company': 'CodeQuick', 'alumni': False, 'year': None, 'degree': '', 'email': 'laxmimanogna7@gmail.com', 'password': 'chennam2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:50] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Nathan', 'last_name': 'Colgrove', 'title': 'Mr.', 'company': 'Caterpillar', 'alumni': True, 'year': None, 'degree': 'Bachelor of Science in Engineering\nMajor: Electrical Engineering', 'email': 'Colgrove_Nathan_K@cat.com', 'password': 'colgrove2024'}
+[27/Mar/2024 17:10:50] "POST /api/signup/ HTTP/1.1" 201 71
+{'first_name': 'Carl', 'last_name': 'Crawford', 'title': 'President', 'company': 'Csuptwo', 'alumni': False, 'year': None, 'degree': '', 'email': 'crawford.carl@csuptwo.com', 'password': 'crawford2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:50] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'John', 'last_name': 'Delwiche', 'title': 'Retired engineer', 'company': 'We Energies retiree', 'alumni': True, 'year': None, 'degree': 'M.S. Engineering, Civil Engineering dept. Environmental 1983', 'email': 'jdelwiche2@att.net', 'password': 'delwiche2024'}
+[27/Mar/2024 17:10:50] "POST /api/signup/ HTTP/1.1" 201 71
+{'first_name': 'Mehul', 'last_name': 'Desai', 'title': 'Dr', 'company': 'Melfin LLC', 'alumni': False, 'year': None, 'degree': '', 'email': 'mehulya@yahoo.com', 'password': 'desai2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:51] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Mary', 'last_name': 'Ejiwale', 'title': 'Ph.D', 'company': 'None', 'alumni': True, 'year': None, 'degree': 'Biomedical and Health Informatics', 'email': 'stablecourse@yahoo.com', 'password': 'ejiwale2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:51] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Justin', 'last_name': 'Farrell', 'title': 'Program Coordinator', 'company': 'RPI Inc', 'alumni': False, 'year': None, 'degree': '', 'email': 'justin.farrell@rpiincorp.com', 'password': 'farrell2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:51] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Lorne', 'last_name': 'Forsythe', 'title': 'Patent Agent', 'company': 'Ford ', 'alumni': True, 'year': None, 'degree': 'Bachelors - Physics, 2012\nMasters - Mechanical Engineering, 2015\nEMBA, 2020', 'email': 'lforsyt8@ford.com', 'password': 'forsythe2024'}
+[27/Mar/2024 17:10:51] "POST /api/signup/ HTTP/1.1" 201 71
+{'first_name': 'Mitchelle', 'last_name': 'Gibson', 'title': 'Design Engineer ', 'company': 'Milwaukee Tool', 'alumni': True, 'year': None, 'degree': "Bachelor's of Science and Engineering - Dec. 2021", 'email': 'mitchell.gibson@milwaukeetool.com', 'password': 'gibson2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:51] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Alka', 'last_name': 'Gupta', 'title': 'Senior Systems Engineer ', 'company': 'Harley-Davidson Motor Company ', 'alumni': True, 'year': None, 'degree': 'Ph.D. in Mechanical Engineering\n2014', 'email': 'Alka.Gupta@harley-davidson.com', 'password': 'gupta2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:51] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Deepak', 'last_name': 'Gupta', 'title': 'Vice President of Engineering', 'company': 'Sarens Nuclear', 'alumni': True, 'year': None, 'degree': 'PhD Mechanical Engineering in 2013', 'email': 'deepak.gupta@sarens.com', 'password': 'gupta2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:52] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Muhammad Istiaque', 'last_name': 'Haider', 'title': 'Senior Mechanical Engineer', 'company': 'Eaton', 'alumni': True, 'year': None, 'degree': 'PhD in Mechanical Engineering, year 2023', 'email': 'istiaquemony@gmail.com', 'password': 'haider2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:52] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Todd', 'last_name': 'Harris', 'title': 'President', 'company': 'CPME USA', 'alumni': True, 'year': None, 'degree': 'BSEE 1999', 'email': 'todd.harris@cpme-usa.com', 'password': 'harris2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:52] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Carl', 'last_name': 'Janssen', 'title': 'None', 'company': 'None', 'alumni': True, 'year': None, 'degree': 'Master of Science in Engineering UW-Milwaukee 2012\nBachelor of Science in Kinesiology UW-Milwaukee 2007', 'email': 'carljanssenwfb@gmail.com', 'password': 'janssen2024'}
+[27/Mar/2024 17:10:52] "POST /api/signup/ HTTP/1.1" 201 71
+{'first_name': 'Garry', 'last_name': 'Jean-Pierre', 'title': 'Lead Engineer', 'company': 'Eaton Research Lab', 'alumni': True, 'year': None, 'degree': 'Electrical Engineering, PhD - 2021', 'email': 'garryri2002@gmail.com', 'password': 'jean-pierre2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:52] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Mark', 'last_name': 'Juds', 'title': 'Chief Engineer', 'company': 'MAJ Engineering, LLC', 'alumni': True, 'year': None, 'degree': 'MSME 1991', 'email': 'markajuds@gmail.com', 'password': 'juds2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:53] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Dennis', 'last_name': 'Kaestner', 'title': 'Lead Process Engineer - Manufacturing Strategy', 'company': 'ABB', 'alumni': True, 'year': None, 'degree': 'BS Industrial Engineering, 2022', 'email': 'denniskaestner5@gmail.com', 'password': 'kaestner2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:53] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Amit', 'last_name': 'Khare', 'title': 'Software Development Leader', 'company': 'IBM', 'alumni': True, 'year': None, 'degree': 'Masters in Computer Science, 2005', 'email': 'khare.amit@hotmail.com', 'password': 'khare2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:53] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Bruce', 'last_name': 'Kleinhans', 'title': 'Senior Structural Engineer (Retired)', 'company': 'Flad Architects (Retired)', 'alumni': True, 'year': None, 'degree': 'BS Structural Engineering 1976', 'email': 'ouidance@charter.net', 'password': 'kleinhans2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:53] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Douglas', 'last_name': 'Kleinhans', 'title': 'Senior Project Eng', 'company': 'Retired', 'alumni': True, 'year': None, 'degree': 'BSEE - 1974', 'email': 'dkleinhans@aol.com', 'password': 'kleinhans2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:53] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'WIlliam', 'last_name': 'Koutnik', 'title': 'Sr Engineer', 'company': 'We Energies', 'alumni': True, 'year': None, 'degree': 'BSEE, 1995', 'email': 'marty.koutnik@we-energies.com', 'password': 'koutnik2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:54] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'John ', 'last_name': 'Long ', 'title': 'Wastewater Engineer - Retired', 'company': 'Rockwell Automation Allen-Bradley', 'alumni': True, 'year': None, 'degree': 'Computer Science Engineering/ Electrical Department - 1977', 'email': 'Johnlong@wi.rr.com', 'password': 'long 2024'}
+[27/Mar/2024 17:10:54] "POST /api/signup/ HTTP/1.1" 201 71
+{'first_name': 'Nicaise', 'last_name': 'Mbunteu', 'title': 'Mechanical Engineer', 'company': 'Baxter', 'alumni': True, 'year': None, 'degree': '2013', 'email': 'mbunteu@gmail.com', 'password': 'mbunteu2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:54] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Ramidu', 'last_name': 'Mirissage', 'title': 'Program Manager', 'company': 'DRS Technologies ', 'alumni': True, 'year': None, 'degree': 'Masters in EE. 2020', 'email': 'ramidu@gmail.com', 'password': 'mirissage2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:54] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Justin', 'last_name': 'Mortimer', 'title': 'CEO', 'company': 'Radyne Corporation', 'alumni': False, 'year': None, 'degree': '', 'email': 'jmortimer@radyne.com', 'password': 'mortimer2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:54] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Talha', 'last_name': 'Naseer', 'title': 'Mr.', 'company': 'BRP ', 'alumni': True, 'year': None, 'degree': '2022. M.Sc Industrial and Manufacturing Engineering', 'email': 'qtnaseer@gmail.com', 'password': 'naseer2024'}
+[27/Mar/2024 17:10:54] "POST /api/signup/ HTTP/1.1" 201 71
+{'first_name': 'Aaron', 'last_name': 'Nodolf', 'title': 'Partner', 'company': 'Michael Best & Friedrich, LLP', 'alumni': True, 'year': None, 'degree': '2001', 'email': 'aknodolf@michaelbest.com', 'password': 'nodolf2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:55] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Abdullah', 'last_name': 'Noman', 'title': 'Software Engineer ', 'company': 'Microsoft', 'alumni': True, 'year': None, 'degree': 'BS in Computer Science, Dec 2021', 'email': 'alnoman612@gmail.com', 'password': 'noman2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:55] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Felix', 'last_name': 'Onukwugha', 'title': 'PRESIDENT/CEO GWOLAS LLC', 'company': 'GWOLAS LLC CONSULTANT ENGINEERS', 'alumni': True, 'year': None, 'degree': 'MECHANICAL ENGINEERING 2005', 'email': 'fonukwugha@wi.rr.com', 'password': 'onukwugha2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:55] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Dave', 'last_name': 'Palmer', 'title': 'Supplier Quality Development Engineer', 'company': 'BRP US, Inc.', 'alumni': True, 'year': None, 'degree': 'MS, Materials Science and Engineering, 2014\nPhD, Materials Science and Engineering, 2025 (expected)', 'email': 'dave.palmer@brp.com', 'password': 'palmer2024'}
+[27/Mar/2024 17:10:55] "POST /api/signup/ HTTP/1.1" 201 71
+{'first_name': 'Prathamesh', 'last_name': 'Pande', 'title': 'Production Supervisor II', 'company': 'Perlick Corporation', 'alumni': True, 'year': None, 'degree': 'MS Industrial and Systems Engineering\nMay 2021', 'email': 'prathameshpande279@gmail.com', 'password': 'pande2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:55] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Shubham', 'last_name': 'Pawar', 'title': 'Software Developer', 'company': 'Radyne Corporation', 'alumni': True, 'year': None, 'degree': 'Masters in Computer Science, 2023', 'email': 'shubhampawar1234@gmail.com', 'password': 'pawar2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:56] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Anahita ', 'last_name': 'Qashqai ', 'title': 'Data Scientist II', 'company': 'Amgen ', 'alumni': True, 'year': None, 'degree': 'PhD, 2022', 'email': 'Anahita.qashqai@gmail.com', 'password': 'qashqai 2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:56] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Adam', 'last_name': 'Ramme', 'title': 'System Control Operator', 'company': 'ATC', 'alumni': True, 'year': None, 'degree': '2005 Civil Engineering', 'email': 'aramme@atcllc.com', 'password': 'ramme2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:56] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Bruce', 'last_name': 'Ramme', 'title': 'Adjunct Professor', 'company': 'Ramme and Associates, LLC', 'alumni': True, 'year': None, 'degree': 'BS Engineering 1976, MS Civil Engineering 1980, EMBA 2004, PhD in Engineering 2008,', 'email': 'kayman17@earthlink.net', 'password': 'ramme2024'}
+[27/Mar/2024 17:10:56] "POST /api/signup/ HTTP/1.1" 201 72
+{'first_name': 'Ravi', 'last_name': 'Redlam', 'title': 'Software Engineer', 'company': 'GE HEALTHCARE', 'alumni': True, 'year': None, 'degree': 'Masters in Computer Science . MAY 2020', 'email': 'sampathredlam@gmail.com', 'password': 'redlam2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:56] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Dan', 'last_name': 'Schlitz ', 'title': 'Dr', 'company': 'UWM', 'alumni': True, 'year': None, 'degree': 'MS Mechanical Engineering ~1992', 'email': 'dan@betastreem.com', 'password': 'schlitz 2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:56] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Steven', 'last_name': 'Seiler', 'title': 'Application Engineer', 'company': 'American Honda Motor Co., Inc.', 'alumni': True, 'year': None, 'degree': 'BSME 1984 & MS Engineering 1989', 'email': 'STEVEN_SEILER@NA.HONDA.COM', 'password': 'seiler2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:57] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Marcia', 'last_name': 'Silva', 'title': 'Associate Director, R&D', 'company': 'Discovery Partners Institute, University of Illinois System', 'alumni': True, 'year': None, 'degree': 'M.S. Engineering - 2006\nPh.D. Engineering - 2013', 'email': 'msilva@uillinois.edu', 'password': 'silva2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:57] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Wayne', 'last_name': 'Stollenwerk', 'title': 'Application Engineer', 'company': 'Prolec-GE Waukesha, Inc', 'alumni': True, 'year': None, 'degree': 'Electrical Engineering December 2007', 'email': 'wayne.stollenwerk@prolec.energy', 'password': 'stollenwerk2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:57] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Becky', 'last_name': 'Tallon', 'title': 'Director - Water Treatment Technologies', 'company': 'A. O. Smith', 'alumni': False, 'year': None, 'degree': '', 'email': 'rmtallon@aosmith.com', 'password': 'tallon2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:57] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Mary', 'last_name': 'Turner', 'title': 'Mrs.', 'company': 'Caterpillar global mining', 'alumni': True, 'year': None, 'degree': 'B.s. electrical engineering ', 'email': 'mturnerzimmer@gmail.com', 'password': 'turner2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:57] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Matt', 'last_name': 'Zeilhofer', 'title': 'President', 'company': 'RPI, Inc. ', 'alumni': True, 'year': None, 'degree': 'Business 2005', 'email': 'matt.zeilhofer@rpiincorp.com', 'password': 'zeilhofer2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:58] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Peter', 'last_name': 'Zielski', 'title': 'Certified Water Technologist', 'company': 'Peter A Zielski', 'alumni': True, 'year': None, 'degree': '1980 Bachelor of Science - Civil Engineering with Emphasis in Water Resources and Environmental Engineering', 'email': 'peterzielski@tds.net', 'password': 'zielski2024'}
+[27/Mar/2024 17:10:58] "POST /api/signup/ HTTP/1.1" 201 72
+{'first_name': 'Ahmad', 'last_name': 'Abdelhadi', 'title': 'Research Associate', 'company': 'UWM College of Engineering & Applied Science', 'alumni': False, 'year': None, 'degree': '', 'email': 'aiajr@uwm.edu', 'password': 'abdelhadi2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:58] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Mahsa', 'last_name': 'Dabagh', 'title': 'Assistant Professor', 'company': 'UWM College of Engineering & Applied Science', 'alumni': False, 'year': None, 'degree': '', 'email': 'dabaghme@uwm.edu', 'password': 'dabagh2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:58] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'WIlliam', 'last_name': 'Dussault', 'title': 'Teaching Faculty Lab Manager EE Department ', 'company': 'UWM College of Engineering & Applied Science', 'alumni': True, 'year': None, 'degree': '', 'email': 'pbindahouse@yahoo.com', 'password': 'dussault2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:58] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Iftekharuddin', 'last_name': 'Khan', 'title': 'Sr. Lecturer', 'company': 'UWM College of Engineering & Applied Science', 'alumni': True, 'year': None, 'degree': "Master's in Industrial & Manufacturing Eng.\nGraduated in 1976-77", 'email': 'khani@uwm.edu', 'password': 'khan2024'}
+[27/Mar/2024 17:10:59] "POST /api/signup/ HTTP/1.1" 201 72
+{'first_name': 'William', 'last_name': 'Musinski', 'title': 'Assistant Professor', 'company': 'UWM College of Engineering & Applied Science', 'alumni': False, 'year': None, 'degree': '', 'email': 'musinski@uwm.edu', 'password': 'musinski2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:59] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Mohammad', 'last_name': 'Qandil', 'title': 'Assistant Director', 'company': 'UWM College of Engineering & Applied Science', 'alumni': True, 'year': None, 'degree': 'PhD in Engineering/Graduated in 2021', 'email': 'mdqandil@uwm.edu', 'password': 'qandil2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:59] "POST /api/signup/ HTTP/1.1" 400 97
+{'first_name': 'Shideh', 'last_name': 'Yavary Mehr', 'title': 'Assistant Visiting Professor', 'company': 'UWM College of Engineering & Applied Science', 'alumni': False, 'year': None, 'degree': '', 'email': 'yavaryme@uwm.edu', 'password': 'yavary mehr2024'}
+Bad Request: /api/signup/
+[27/Mar/2024 17:10:59] "POST /api/signup/ HTTP/1.1" 400 97
