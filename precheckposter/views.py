@@ -68,7 +68,7 @@ def check_poster_round_1_edit(poster, judge, scoring_type):
         return 2
     poster_status = False
     if scoring_type == 'research-poster':
-        return check_poster_round_1_for_research_poster(poster, judge)
+        poster_status = Students.objects.filter(poster_ID=poster).exists()
     if scoring_type == 'explearning':
         poster_status = ExpLearning.objects.filter(poster_id=poster, judge=judge).exists()
     if scoring_type == 'threemt':
