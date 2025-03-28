@@ -112,11 +112,11 @@ WSGI_APPLICATION = 'srpc_new.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'SRPC',
+        'NAME': 'SRPC2025',
         'USER': 'root',
         'PASSWORD': 'divakar@Y123',
-        # 'HOST': 'srpc-2024.cozktm7rmvdy.us-east-2.rds.amazonaws.com',
-        'HOST': 'localhost',
+        'HOST': 'srpc-2024.cozktm7rmvdy.us-east-2.rds.amazonaws.com',
+        # 'HOST': 'localhost',
         'PORT': '3306',  # usually 3306 for MySQL
     }
 }
