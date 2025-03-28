@@ -116,7 +116,6 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'divakar@Y123',
         'HOST': 'srpc-2024.cozktm7rmvdy.us-east-2.rds.amazonaws.com',
-        # 'HOST': 'localhost',
         'PORT': '3306',  # usually 3306 for MySQL
     }
 }

@@ -53,9 +53,9 @@ def check_poster_round_1_for_research_poster(poster, judge):
         status = Scores_Round_1.objects.filter(
             judge=judge, Student=Students.objects.filter(poster_ID=poster).first()).exists()
         if status:
-            return 1
-        else:
             return 2
+        else:
+            return 1
     else:
         return 3
 
