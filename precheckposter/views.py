@@ -67,12 +67,13 @@ def check_poster_round_1_edit(poster, judge, scoring_type):
     if not poster.isdigit():
         return 2
     poster_status = False
-    if scoring_type == 'research-poster':
-        poster_status = Students.objects.filter(poster_ID=poster).exists()
-    if scoring_type == 'explearning':
-        poster_status = ExpLearning.objects.filter(poster_id=poster, judge=judge).exists()
-    if scoring_type == 'threemt':
-        poster_status = ThreeMt.objects.filter(poster_id=poster, judge=judge).exists()
+    # if scoring_type == 'research-poster':
+    poster_status = Students.objects.filter(poster_ID=poster).exists()
+    #     print(poster_status,"poster_status")
+    # if scoring_type == 'explearning':
+    #     poster_status = ExpLearning.objects.filter(poster_id=poster, judge=judge).exists()
+    # if scoring_type == 'threemt':
+    #     poster_status = ThreeMt.objects.filter(poster_id=poster, judge=judge).exists()
 
     if poster_status:
             return 1

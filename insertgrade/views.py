@@ -116,32 +116,29 @@ class round1_edit(APIView):
         # 1 -> valid poster id and can be edited
         # 2 -> invalid poster id
         # 3 -> poster is not scored by the judge
-        scoring_type = request.query_params.get('scoring_type')
-        scoring_type = "research-poster"
-        poster_status = check_poster_round_1_edit(poster_id, request.user,scoring_type)
-        print(poster_status,"poster_status")
-        if poster_status == 1:
-            poster = Students.objects.filter(poster_ID=poster_id).first()
-            poster_title = poster.poster_title
-            student_name = poster.Name
-            student_email = poster.email
-            student_department = poster.department
-            # get the research score, communication score, and presentation score from Scores_Round_1
-            scores_round_1 = Scores_Round_1.objects.filter(
-                Student=poster, judge=request.user).first()
-            research_score = scores_round_1.research_score
-            communication_score = scores_round_1.communication_score
-            presentation_score = scores_round_1.presentation_score
-            feedback = scores_round_1.feedback
-
-            return Response({"poster_id": poster_id, "poster_title": poster_title, "student_name": student_name, "student_email": student_email, "student_department": student_department, "research_score": research_score, "communication_score": communication_score, "presentation_score": presentation_score, "feedback": feedback}, status=status.HTTP_200_OK)
-        elif poster_status == 2:
-            return Response({"error": "Invalid Poster ID"}, status=status.HTTP_400_BAD_REQUEST)
-        elif poster_status == 3:
-            return Response({"error": "Poster is not scored by the judge"}, status=status.HTTP_400_BAD_REQUEST)
+        # scoring_type = request.query_params.get('scoring_type')
+        # scoring_type = "research-poster"
+        # poster_status = check_poster_round_1_edit(poster_id, request.user,scoring_type)
+        # print(poster_status,"poster_status")
+        # if poster_status == 1:
+        poster = Students.objects.filter(poster_ID=poster_id).first()
+        poster_title = poster.poster_title
+        student_name = poster.Name
+        student_email = poster.email
+        student_department = poster.department
+        # get the research score, communication score, and presentation score from Scores_Round_1
+        scores_round_1 = Scores_Round_1.objects.filter(Student=poster, judge=request.user).first()
+        if scores_round_1 is not None:
+                research_score = scores_round_1.research_score
+                communication_score = scores_round_1.communication_score
+                presentation_score = scores_round_1.presentation_score
+                feedback = scores_round_1.feedback
+                return Response({"poster_id": poster_id, "poster_title": poster_title, "student_name": student_name, "student_email": student_email, "student_department": student_department, "research_score": research_score, "communication_score": communication_score, "presentation_score": presentation_score, "feedback": feedback}, status=status.HTTP_200_OK)
         else:
-
-            return Response({"error": "Something went wrong"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"poster_id": poster_id, "poster_title": poster_title, "student_name": student_name, "student_email": student_email, "student_department": student_department, "research_score": 0, "communication_score": 0, "presentation_score": 0, "feedback": ""}, status=status.HTTP_200_OK)
+        # elif poster_status == 3:
+        #     return Response({"error": "Poster is not scored by the judge"}, status=status.HTTP_400_BAD_REQUEST)
+        # return Response({"error": "Something went wrong"}, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request):
         # check if the poster is valid or not and if the poster is valid then save the score in Scores_Round_2
@@ -184,15 +181,24 @@ class round1_edit(APIView):
             # get the student object from the poster id
             student = Students.objects.filter(poster_ID=poster_id).first()
 
-            scores_round_1 = Scores_Round_1.objects.filter(
-                Student=student, judge=request.user).first()
+            # scores_round_1 = Scores_Round_1.objects.filter(
+            #     Student=student, judge=request.user).first()
 
-            scores_round_1.research_score = research_score
-            scores_round_1.communication_score = communication_score
-            scores_round_1.presentation_score = presentation_score
-            scores_round_1.feedback = feedback
-            scores_round_1.save()
-
+            # scores_round_1.research_score = research_score
+            # scores_round_1.communication_score = communication_score
+            # scores_round_1.presentation_score = presentation_score
+            # scores_round_1.feedback = feedback
+            # scores_round_1.save()
+            score_instance, created = Scores_Round_1.objects.update_or_create(
+                Student=student,
+                judge=request.user,
+                defaults={
+                    'research_score': research_score,
+                    'communication_score': communication_score,
+                    'presentation_score': presentation_score,
+                    'feedback': feedback,
+                }
+            )
             return Response({"success": "Score submitted successfully."}, status=status.HTTP_200_OK)
         elif poster_status == 2:
 

@@ -7,18 +7,59 @@ from .models import ThreeMt, Total_Scores_ThreeMT
 from .serializer import ThreeMtSerializer, UpdateThreeMtSerializer
 from django.shortcuts import get_object_or_404
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from home.models import Students
+from .models import ThreeMt
+# from .serializers import ThreeMtSerializer  # Make sure this serializer exists
+
+
+
 class GetThreeMtAPIView(APIView):
     def get(self, request):
         poster_id = request.query_params.get('poster_id', None)
 
-        if poster_id:
-            three_mt_objects = ThreeMt.objects.filter(poster_id=poster_id)
-        else:
-            three_mt_objects = ThreeMt.objects.all()
+        if not poster_id:
+            return Response({
+                "Three_mt_posters": [],
+                "status": "Poster ID not provided"
+            }, status=status.HTTP_400_BAD_REQUEST)
 
-        serialized_data = ThreeMtSerializer(three_mt_objects, many=True).data
-        return Response({"ThreeMT_posters": serialized_data}, status=status.HTTP_200_OK)
-    
+        # Check if the poster exists in the Students table
+        try:
+            student = Students.objects.get(poster_ID=poster_id)
+        except Students.DoesNotExist:
+            return Response({
+                "Three_mt_posters": [],
+                "status": "Not a Valid Poster Id"
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        # Check if there are any ThreeMt entries for this poster ID
+        three_mt_entries = ThreeMt.objects.filter(poster_id=poster_id)
+
+        if three_mt_entries.exists():
+            # Case 3: Poster exists in both Students and ThreeMt → return the scored data
+            serialized_data = ThreeMtSerializer(three_mt_entries, many=True).data
+            return Response({
+                "Three_mt_posters": serialized_data
+            }, status=status.HTTP_200_OK)
+        else:
+            # Case 2: Poster exists but hasn't been scored yet in ThreeMt
+            return Response({
+                "Three_mt_posters": [{
+                    "poster_id": student.poster_ID,
+                    "student_name": student.Name,
+                    "student_email": student.email,
+                    "comprehension_content": None,
+                    "engagement": None,
+                    "communication": None,
+                    "overall_impression": None,
+                    "feedback": None
+                }],
+                "status": "Poster exists but has not been scored yet"
+            }, status=status.HTTP_200_OK)
+
 #@authentication_classes([JWTAuthentication])
 #@permission_classes([IsAuthenticated])
 class UpdateThreeMtAPIView(APIView):

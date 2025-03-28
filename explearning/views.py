@@ -8,20 +8,54 @@ from .models import ExpLearning
 from .serializer import ExpLearningSerializer, UpdateExpLearningSerializer
 from django.shortcuts import get_object_or_404
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from home.models import Students
+from .models import ExpLearning
+# from .serializers import ExpLearningSerializer
+
 class GetExpLearningAPIView(APIView):
     def get(self, request):
         poster_id = request.query_params.get('poster_id', None)
 
-        if poster_id:
-            exp_learnings_objects = ExpLearning.objects.filter(poster_id=poster_id)
-            if not exp_learnings_objects.exists():
-                return Response({"message": f"No scores found for Poster ID {poster_id}."}, status=status.HTTP_404_NOT_FOUND)
-        else:
-            # poster_id not provided — return blank result instead of all records
-            return Response({"Exp_learning_posters": []}, status=status.HTTP_200_OK)
+        if not poster_id:
+            return Response({
+                "Exp_learning_posters": [],
+                "status": "Poster ID not provided"
+            }, status=status.HTTP_400_BAD_REQUEST)
 
-        serialized_data = ExpLearningSerializer(exp_learnings_objects, many=True).data
-        return Response({"Exp_learning_posters": serialized_data}, status=status.HTTP_200_OK)
+        # Check if poster exists in Students table
+        try:
+            student = Students.objects.get(poster_ID=poster_id)
+        except Students.DoesNotExist:
+            return Response({
+                "Exp_learning_posters": [],
+                "status": "Not a Valid Poster Id"
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        # Check if an ExpLearning entry exists for that poster
+        exp_learning_entries = ExpLearning.objects.filter(poster_id=poster_id)
+
+        if exp_learning_entries.exists():
+            # Case 3: Return existing ExpLearning records
+            serialized_data = ExpLearningSerializer(exp_learning_entries, many=True).data
+            return Response({"Exp_learning_posters": serialized_data}, status=status.HTTP_200_OK)
+        else:
+            # Case 2: Poster exists but no ExpLearning record yet
+            return Response({
+                "Exp_learning_posters": [{
+                    "poster_id": student.poster_ID,
+                    "student_name": student.Name,
+                    "student_email": student.email,
+                    "reflection_score": None,
+                    "communication_score": None,
+                    "presentation_score": None,
+                    "feedback": None,
+                }],
+                "status": "Poster exists but has not been scored yet"
+            }, status=status.HTTP_200_OK)
+
 
     
 #@authentication_classes([JWTAuthentication])
