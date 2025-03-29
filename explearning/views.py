@@ -14,11 +14,17 @@ from rest_framework import status
 from home.models import Students
 from .models import ExpLearning
 # from .serializers import ExpLearningSerializer
+from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
 
+
+
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 class GetExpLearningAPIView(APIView):
     def get(self, request):
         poster_id = request.query_params.get('poster_id', None)
-
         if not poster_id:
             return Response({
                 "Exp_learning_posters": [],
@@ -35,7 +41,7 @@ class GetExpLearningAPIView(APIView):
             }, status=status.HTTP_404_NOT_FOUND)
 
         # Check if an ExpLearning entry exists for that poster
-        exp_learning_entries = ExpLearning.objects.filter(poster_id=poster_id)
+        exp_learning_entries = ExpLearning.objects.filter(poster_id=poster_id, judge=request.user.id)
 
         if exp_learning_entries.exists():
             # Case 3: Return existing ExpLearning records
@@ -48,6 +54,7 @@ class GetExpLearningAPIView(APIView):
                     "poster_id": student.poster_ID,
                     "student_name": student.Name,
                     "student_email": student.email,
+                    "student_id":student.id,
                     "reflection_score": None,
                     "communication_score": None,
                     "presentation_score": None,
@@ -58,27 +65,44 @@ class GetExpLearningAPIView(APIView):
 
 
     
-#@authentication_classes([JWTAuthentication])
-#@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+
 class UpdateExpLearningAPIView(APIView):
+    @authentication_classes([JWTAuthentication])
+    @permission_classes([IsAuthenticated])
     def post(self, request):
         poster_id = request.data.get('poster_id')
-        
-        if not poster_id:
-            return Response({"error": "poster_ID is required."}, status=status.HTTP_400_BAD_REQUEST)
-        
-        # Get the existing ExpLearning record
-        exp_learning = get_object_or_404(ExpLearning, poster_id=poster_id)
-        
-        # Use serializer to validate and update the instance
+        student_id = request.data.get('student')
+
+        if not poster_id or not student_id:
+            return Response({"error": "poster_id and student are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            student_obj = Students.objects.get(id=student_id)
+        except Students.DoesNotExist:
+            return Response({"error": "Student not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Get or create ExpLearning record
+        exp_learning, created = ExpLearning.objects.get_or_create(
+            poster_id=poster_id,
+            student=student_obj,
+            judge=request.user
+        )
+
+        # Validate and update
         serializer = UpdateExpLearningSerializer(exp_learning, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            # return Response({"message": "ExpLearning updated successfully", "updated_fields": serializer.validated_data},
-            #                 status=status.HTTP_200_OK)
-            return Response({"message": "Updated", "updated_fields": ExpLearningSerializer(exp_learning).data})
+            message = "Created" if created else "Updated"
+            return Response({
+                "message": message,
+                "updated_fields": ExpLearningSerializer(exp_learning).data
+            }, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
     
 class ComputeAndStoreExpLearningAggregatesAPIView(APIView):
     def post(self, request):

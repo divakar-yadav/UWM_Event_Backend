@@ -17,7 +17,7 @@ class UpdateExpLearningSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ExpLearning
-        fields = ['poster_id', 'judge', 'reflection_score', 
+        fields = ['poster_id', 'judge','student', 'reflection_score', 
                   'communication_score', 'presentation_score', 'feedback']
 
     def update(self, instance, validated_data):
