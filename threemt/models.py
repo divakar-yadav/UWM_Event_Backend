@@ -6,7 +6,7 @@ from django.db.models.functions import Round
 
 
 class ThreeMt(models.Model):
-    poster_id = models.IntegerField(primary_key=True,unique=True)  # New field as Primary Key
+    poster_id = models.IntegerField(null=True, blank=True)  # New field as Primary Key
     judge = models.ForeignKey(User, on_delete=models.CASCADE)
     student = models.ForeignKey(Students, on_delete=models.CASCADE)
     comprehension_content = models.FloatField(null=True, blank=True)

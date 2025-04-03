@@ -6,7 +6,7 @@ from django.db.models.functions import Round
 
 
 class ExpLearning(models.Model):
-    poster_id = models.IntegerField(primary_key=True,unique=True)  # New field as Primary Key
+    poster_id = models.IntegerField(null=True, blank=True)  # New field as Primary Key
     judge = models.ForeignKey(User, on_delete=models.CASCADE)
     student = models.ForeignKey(Students, on_delete=models.CASCADE)
     reflection_score = models.FloatField(null=True, blank=True)

@@ -24,37 +24,57 @@ from rest_framework.permissions import IsAuthenticated
 @permission_classes([IsAuthenticated])
 class GetExpLearningAPIView(APIView):
     def get(self, request):
-        poster_id = request.query_params.get('poster_id', None)
-        if not poster_id:
+        # 1) Retrieve poster_id
+        poster_id_str = request.query_params.get('poster_id', None)
+        if not poster_id_str:
             return Response({
                 "Exp_learning_posters": [],
                 "status": "Poster ID not provided"
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        # Check if poster exists in Students table
+        # 2) Validate that poster_id is an integer
+        try:
+            poster_id = int(poster_id_str)
+        except ValueError:
+            return Response({
+                "Exp_learning_posters": [],
+                "status": "Invalid Poster ID (not an integer)"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # 3) Ensure poster_id is within 201-299 range
+        if poster_id < 301 or poster_id > 399:
+            return Response({
+                "Exp_learning_posters": [],
+                "status": "Poster ID must be between 301 and 399"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # 4) Check if poster exists in Students table
         try:
             student = Students.objects.get(poster_ID=poster_id)
         except Students.DoesNotExist:
             return Response({
                 "Exp_learning_posters": [],
-                "status": "Not a Valid Poster Id"
+                "status": "Not a Valid Poster ID"
             }, status=status.HTTP_404_NOT_FOUND)
 
-        # Check if an ExpLearning entry exists for that poster
-        exp_learning_entries = ExpLearning.objects.filter(poster_id=poster_id, judge=request.user.id)
+        # 5) Check if an ExpLearning entry exists for that poster
+        exp_learning_entries = ExpLearning.objects.filter(
+            poster_id=poster_id,
+            judge=request.user.id
+        )
 
         if exp_learning_entries.exists():
-            # Case 3: Return existing ExpLearning records
+            # Case: Return existing ExpLearning records
             serialized_data = ExpLearningSerializer(exp_learning_entries, many=True).data
             return Response({"Exp_learning_posters": serialized_data}, status=status.HTTP_200_OK)
         else:
-            # Case 2: Poster exists but no ExpLearning record yet
+            # Case: Poster exists but no ExpLearning record yet
             return Response({
                 "Exp_learning_posters": [{
                     "poster_id": student.poster_ID,
                     "student_name": student.Name,
                     "student_email": student.email,
-                    "student_id":student.id,
+                    "student_id": student.id,
                     "reflection_score": None,
                     "communication_score": None,
                     "presentation_score": None,
@@ -62,6 +82,7 @@ class GetExpLearningAPIView(APIView):
                 }],
                 "status": "Poster exists but has not been scored yet"
             }, status=status.HTTP_200_OK)
+
 
 
     
