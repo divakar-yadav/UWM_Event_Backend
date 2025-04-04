@@ -41,7 +41,7 @@ class GetThreeMtAPIView(APIView):
         if poster_id < 401 or poster_id > 499:
             return Response({
                 "ThreeMT_posters": [],
-                "status": "Poster ID must be between 301 and 399"
+                "status": "Poster ID must be between 401 and 499"
             }, status=status.HTTP_400_BAD_REQUEST)
         # Check if poster exists in Students table
         try:
