@@ -17,6 +17,7 @@ from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
+
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 class GetThreeMtAPIView(APIView):
@@ -28,12 +29,12 @@ class GetThreeMtAPIView(APIView):
                 "status": "Poster ID not provided"
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        # 2) Validate that poster_id is an integer
+        # Validate that poster_id is an integer
         try:
             poster_id = int(poster_id)
         except ValueError:
             return Response({
-                "Exp_learning_posters": [],
+                "ThreeMT_posters": [],
                 "status": "Invalid Poster ID (not an integer)"
             }, status=status.HTTP_400_BAD_REQUEST)
         
@@ -43,6 +44,7 @@ class GetThreeMtAPIView(APIView):
                 "ThreeMT_posters": [],
                 "status": "Poster ID must be between 401 and 499"
             }, status=status.HTTP_400_BAD_REQUEST)
+
         # Check if poster exists in Students table
         try:
             student = Students.objects.get(poster_ID=poster_id)
@@ -52,23 +54,39 @@ class GetThreeMtAPIView(APIView):
                 "status": "Not a Valid Poster Id"
             }, status=status.HTTP_404_NOT_FOUND)
 
-        # Check if an ExpLearning entry exists for that poster
-        print(request.user.id, "request.user.id")
-        print(poster_id, "poster_id")
-        three_mt_entries = ThreeMt.objects.filter(poster_id=poster_id, judge=request.user)
-        print(three_mt_entries, "three_mt_entries")
+        # Check if a ThreeMt entry exists for that poster & current judge
+        three_mt_entries = ThreeMt.objects.filter(
+            poster_id=poster_id,
+            judge=request.user
+        )
+
         if three_mt_entries.exists():
-            # Case 3: Return existing ExpLearning records
-            serialized_data = ThreeMtSerializer(three_mt_entries, many=True).data
-            return Response({"ThreeMT_posters": serialized_data}, status=status.HTTP_200_OK)
+            # Case: Return existing ThreeMt records, adding extra fields
+            output_list = []
+            for entry in three_mt_entries:
+                # Build a dictionary of existing data plus extra fields
+                output_list.append({
+                    "poster_id": entry.poster_id,
+                    "student_name": entry.student.Name,
+                    "student_email": entry.student.email,
+                    "poster_title": entry.student.poster_title,  # from Students model
+                    "student": entry.student.id,
+                    "comprehension_content": entry.comprehension_content,
+                    "engagement": entry.engagement,
+                    "communication": entry.communication,
+                    "overall_impression": entry.overall_impression,
+                    "feedback": entry.feedback if entry.feedback else "",
+                })
+            return Response({"ThreeMT_posters": output_list}, status=status.HTTP_200_OK)
         else:
-            # Case 2: Poster exists but no ExpLearning record yet
+            # Poster exists but no ThreeMt record yet
             return Response({
                 "ThreeMT_posters": [{
                     "poster_id": student.poster_ID,
                     "student_name": student.Name,
                     "student_email": student.email,
-                    "student":student.id,
+                    "poster_title": student.poster_title,  # from Students model
+                    "student": student.id,
                     "comprehension_content": None,
                     "engagement": None,
                     "communication": None,
@@ -78,28 +96,11 @@ class GetThreeMtAPIView(APIView):
                 "status": "Poster exists but has not been scored yet"
             }, status=status.HTTP_200_OK)
 
+
+
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 class UpdateThreeMtAPIView(APIView):
-    # def post(self, request):
-    #         poster_id = request.data.get('poster_id')
-
-    #         if not poster_id:
-    #             return Response({"error": "poster_id is required."}, status=status.HTTP_400_BAD_REQUEST)
-
-    #         # Get the ThreeMt instance
-    #         three_mt = get_object_or_404(ThreeMt, poster_id=poster_id)
-
-    #         # Validate and update using serializer
-    #         serializer = UpdateThreeMtSerializer(three_mt, data=request.data, partial=True)
-    #         if serializer.is_valid():
-    #             serializer.save()
-    #             return Response({
-    #                 "message": "Updated",
-    #                 "updated_fields": serializer.data
-    #             }, status=status.HTTP_200_OK)
-
-    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request):
         poster_id = request.data.get('poster_id')

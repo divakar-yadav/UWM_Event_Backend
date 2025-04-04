@@ -8,11 +8,13 @@ User = get_user_model()
 
 class ThreeMtSerializer(serializers.ModelSerializer):
     poster_id = serializers.IntegerField(read_only=True)  # Explicitly define poster_ID as primary key
+    poster_title = serializers.CharField(source='student.poster_title', read_only=True)
+    student_name = serializers.CharField(source='student.Name', read_only=True)
 
     class Meta:
         model = ThreeMt
-        fields = ['poster_id', 'judge', 'student', 'comprehension_content', 'engagement', 
-                  'communication', 'overall_impression', 'feedback']
+        fields = '__all__'
+
 
 class UpdateThreeMtSerializer(serializers.ModelSerializer):
     judge = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)  # Accept only user ID

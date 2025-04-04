@@ -41,7 +41,7 @@ class GetExpLearningAPIView(APIView):
                 "status": "Invalid Poster ID (not an integer)"
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        # 3) Ensure poster_id is within 201-299 range
+        # 3) Ensure poster_id is within 301-399 range
         if poster_id < 301 or poster_id > 399:
             return Response({
                 "Exp_learning_posters": [],
@@ -57,16 +57,29 @@ class GetExpLearningAPIView(APIView):
                 "status": "Not a Valid Poster ID"
             }, status=status.HTTP_404_NOT_FOUND)
 
-        # 5) Check if an ExpLearning entry exists for that poster
+        # 5) Check if an ExpLearning entry exists for that poster + this judge
         exp_learning_entries = ExpLearning.objects.filter(
             poster_id=poster_id,
             judge=request.user.id
         )
 
         if exp_learning_entries.exists():
-            # Case: Return existing ExpLearning records
-            serialized_data = ExpLearningSerializer(exp_learning_entries, many=True).data
-            return Response({"Exp_learning_posters": serialized_data}, status=status.HTTP_200_OK)
+            # Case: Poster already scored by this judge
+            output_list = []
+            for entry in exp_learning_entries:
+                # Manually merge fields from ExpLearning + Students
+                output_list.append({
+                    "poster_id": entry.poster_id,
+                    "student_name": entry.student.Name,
+                    "student_email": entry.student.email,
+                    "poster_title": entry.student.poster_title,  # from Students model
+                    "student_id": entry.student.id,
+                    "reflection_score": entry.reflection_score,
+                    "communication_score": entry.communication_score,
+                    "presentation_score": entry.presentation_score,
+                    "feedback": entry.feedback if entry.feedback else None,
+                })
+            return Response({"Exp_learning_posters": output_list}, status=status.HTTP_200_OK)
         else:
             # Case: Poster exists but no ExpLearning record yet
             return Response({
@@ -74,6 +87,7 @@ class GetExpLearningAPIView(APIView):
                     "poster_id": student.poster_ID,
                     "student_name": student.Name,
                     "student_email": student.email,
+                    "poster_title": student.poster_title,  # from Students model
                     "student_id": student.id,
                     "reflection_score": None,
                     "communication_score": None,
@@ -82,6 +96,7 @@ class GetExpLearningAPIView(APIView):
                 }],
                 "status": "Poster exists but has not been scored yet"
             }, status=status.HTTP_200_OK)
+
 
 
 
