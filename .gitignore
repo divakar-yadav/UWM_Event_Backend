@@ -1,1 +1,11 @@
-venv
+/venv
+# Ignore Python bytecode files
+*.pyc
+*.pyo
+__pycache__/
+
+# Ignore all compiled cache inside Django migrations
+**/migrations/__pycache__/
+
+# But keep actual migration scripts
+!**/migrations/*.py

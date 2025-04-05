@@ -10,7 +10,11 @@ class Students_Serializer(serializers.ModelSerializer):
         model = Students
         fields = ('Name', 'poster_ID')
 
-
+class StudentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Students
+        fields = '__all__'
+        
 class Scores_Round_Serializer(serializers.ModelSerializer):
     student_name = serializers.ReadOnlyField(source='Student.Name')
     poster_id = serializers.ReadOnlyField(source='Student.poster_ID')

@@ -4,15 +4,14 @@ from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Students, Scores_Round_1, Scores_Round_2, \
-    Total_Scores_Round_2_Graduate, Total_Scores_Round_2_Undergraduate, \
+from .models import Students, Scores_Round_1,\
     Total_Scores_Round_1_Graduate, Total_Scores_Round_1_Undergraduate
 from explearning.models import ExpLearning
 from explearning.serializer import ExpLearningSerializer
 from rest_framework import status
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .ScoreSerializer import Scores_Round_Serializer, StudentShowJudgeCountSerializer
+from .ScoreSerializer import Scores_Round_Serializer, StudentShowJudgeCountSerializer, StudentCreateSerializer
 
 
 
@@ -161,45 +160,15 @@ class populate_round_1_table(APIView):
             total_score.save()
 
         return HttpResponseRedirect(reverse('admin:index'))
+    
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------from rest_framework import serializers
 
-# class populate_round_2_table(APIView):
-#     def get(self, request):
-#         # scores for undergraduate students whose poster id is in range 100 to 199
-#         scores = Scores_Round_2.get_average_scores()
-
-#         undergraduate_scores = scores.filter(Student__poster_ID__range=(100, 199))
-
-#         poster_id = undergraduate_scores.values_list('Student__poster_ID', flat=True)
-
-#         # delete the scores of undergraduate students from the total scores table
-
-#         Total_Scores_Round_2_Undergraduate.objects.exclude(poster_id__in=poster_id).delete()
-
-#         for score in undergraduate_scores:
-#             total_score, created = Total_Scores_Round_2_Undergraduate.objects.get_or_create(poster_id=Students.objects.get(poster_ID=score['Student__poster_ID']))
-#             total_score.Name = score['Student__Name']
-#             total_score.email = score['Student__email']
-#             total_score.avg_research_score = score['avg_research_score']
-#             total_score.avg_communication_score = score['avg_communication_score']
-#             total_score.avg_presentation_score = score['avg_presentation_score']
-#             total_score.total_score = score['total_score']
-#             total_score.save()
-
-#         # filter the scores for graduate students
-#         graduate_scores = scores.filter(Student__poster_ID__range=(200, 299))
-
-#         poster_ids = graduate_scores.values_list('Student__poster_ID', flat=True)
-
-#         Total_Scores_Round_2_Graduate.objects.exclude(poster_id__in=poster_ids).delete()
-
-#         for score in graduate_scores:
-#             total_score, created = Total_Scores_Round_2_Graduate.objects.get_or_create(poster_id=Students.objects.get(poster_ID=score['Student__poster_ID']))
-#             total_score.Name = score['Student__Name']
-#             total_score.email = score['Student__email']
-#             total_score.avg_research_score = score['avg_research_score']
-#             total_score.avg_communication_score = score['avg_communication_score']
-#             total_score.avg_presentation_score = score['avg_presentation_score']
-#             total_score.total_score = score['total_score']
-#             total_score.save()
-
-#         return HttpResponseRedirect(reverse('admin:index'))
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+class StudentCreateAPIView(APIView):
+    def post(self, request):
+        serializer = StudentCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Student added successfully."}, status=status.HTTP_201_CREATED)
+        return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
