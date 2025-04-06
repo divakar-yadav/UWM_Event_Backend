@@ -163,8 +163,8 @@ class populate_round_1_table(APIView):
     
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------from rest_framework import serializers
 
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
+#@authentication_classes([JWTAuthentication])
+#@permission_classes([IsAuthenticated])
 class StudentCreateAPIView(APIView):
     def post(self, request):
         serializer = StudentCreateSerializer(data=request.data)
