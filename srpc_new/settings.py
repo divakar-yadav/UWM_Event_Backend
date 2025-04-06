@@ -119,7 +119,18 @@ DATABASES = {
         'PORT': '3306',  # usually 3306 for MySQL
     }
 }
+# this is a general user root and any database can decide to give its access to root.
+# CREATE USER 'root'@'%' IDENTIFIED BY 'divakar@Y123';
 
+
+#giving all the privileges to the user root
+# GRANT ALL PRIVILEGES ON SRPC2025.* TO 'root'@'%';
+
+# FLUSH PRIVILEGES;
+
+# Optional: Remove all previous migration files except __init__.py
+# find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+# find . -path "*/migrations/*.pyc" -delete
 
 AUTH_USER_MODEL = 'signup.User'
 
