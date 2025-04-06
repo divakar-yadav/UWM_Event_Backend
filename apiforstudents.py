@@ -21,7 +21,7 @@ for index, row in df.iterrows():
         "academic_status": row.get("Category", ""),
         "first_name": row.get("First Name", ""),
         "last_name": row.get("Last Name", ""),
-        "phonetic_spelling": row.get("Last Name", ""),
+        "phonetic_spelling": row.get("Phonetic spelling", ""),
         "research_adviser_first_name": row.get("Research adviser first name", ""),
         "research_adviser_last_name": row.get("Research adviser last name", ""),
         "research_adviser_email": row.get("Research adviser email", ""),
