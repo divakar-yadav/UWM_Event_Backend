@@ -2,10 +2,10 @@ import pandas as pd
 import requests
 from datetime import date
 
-EXCEL_PATH = "/Users/xavier/Desktop/UWMCAPSTONE/2025rpc.xlsx"
-API_URL = "http://127.0.0.1:8000/api/home/students/create/"
-USE_PROD = False
-TOKEN = "token"
+EXCEL_PATH = "/Users/divakaryadav/Documents/SRPC_DATA/2025rpc.xlsx"
+API_URL = "https://api.uwmsrpc.com/api/home/students/create"
+USE_PROD = True
+TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0MTA3MzI4LCJpYXQiOjE3NDQwODkzMjgsImp0aSI6IjcwMWViODc4ZDJhMDQ4NGJiNmMzODUzZjM4NTIyZDI5IiwidXNlcl9pZCI6M30.RV2laLadhmaosVQVMyPavcaKmHmw1K89ogmVhimO8mo"
 
 df = pd.read_excel(EXCEL_PATH).fillna("")
 
