@@ -26,7 +26,7 @@ class GetThreeMtAPIView(APIView):
         if not poster_id:
             return Response({
                 "ThreeMT_posters": [],
-                "status": "Poster ID not provided"
+                "status": "Thesis ID not provided"
             }, status=status.HTTP_400_BAD_REQUEST)
 
         # Validate that poster_id is an integer
@@ -35,14 +35,14 @@ class GetThreeMtAPIView(APIView):
         except ValueError:
             return Response({
                 "ThreeMT_posters": [],
-                "status": "Invalid Poster ID (not an integer)"
+                "status": "Invalid Thesis ID (not an integer)"
             }, status=status.HTTP_400_BAD_REQUEST)
         
         # Ensure poster_id is within 401-499
         if poster_id < 401 or poster_id > 499:
             return Response({
                 "ThreeMT_posters": [],
-                "status": "Poster ID must be between 401 and 499"
+                "status": "Thesis ID must be between 401 and 499"
             }, status=status.HTTP_400_BAD_REQUEST)
 
         # Check if poster exists in Students table
@@ -51,7 +51,7 @@ class GetThreeMtAPIView(APIView):
         except Students.DoesNotExist:
             return Response({
                 "ThreeMT_posters": [],
-                "status": "Not a Valid Poster Id"
+                "status": "Not a Valid Thesis Id"
             }, status=status.HTTP_404_NOT_FOUND)
 
         # Check if a ThreeMt entry exists for that poster & current judge
@@ -112,7 +112,7 @@ class UpdateThreeMtAPIView(APIView):
         try:
             student_obj = Students.objects.get(poster_ID=poster_id)
         except Students.DoesNotExist:
-            return Response({"error": "Poster not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Thesis not found."}, status=status.HTTP_404_NOT_FOUND)
 
         # Get or create ExpLearning record
         three_mt, created = ThreeMt.objects.get_or_create(
