@@ -2,13 +2,24 @@ import pandas as pd
 import requests
 from datetime import date
 
-EXCEL_PATH = "/Users/divakaryadav/Documents/SRPC_DATA/2025rpc.xlsx"
-API_URL = "https://api.uwmsrpc.com/api/home/students/create"
-USE_PROD = True
-TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0MTA3MzI4LCJpYXQiOjE3NDQwODkzMjgsImp0aSI6IjcwMWViODc4ZDJhMDQ4NGJiNmMzODUzZjM4NTIyZDI5IiwidXNlcl9pZCI6M30.RV2laLadhmaosVQVMyPavcaKmHmw1K89ogmVhimO8mo"
-def sentence_case(text):
-    # "MY RESEARCH POSTER" -> "My research poster"
-    return text.capitalize() if isinstance(text, str) else text
+EXCEL_PATH = "/Users/xavier/Desktop/UWMCAPSTONE/2025rpc.xlsx"
+API_URL = "http://127.0.0.1:8000/api/home/students/create/"
+USE_PROD = False
+TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0ODQ4OTU5LCJpYXQiOjE3NDQ4MzA5NTksImp0aSI6IjM3NjNkMGFlOTdhYzQ1NzJhMjk0YTMxYmMzY2VjNDc4IiwidXNlcl9pZCI6NX0.2ObkTHG1CLIyoebb_26FStb1CbRDqh_Ns9TSHIJhoIg"
+
+df = pd.read_excel(EXCEL_PATH).fillna("")
+
+def smart_title(text):
+    if not isinstance(text, str):
+        return text
+    words = text.split()
+    result = []
+    for w in words:
+        if w.isupper():
+            result.append(w) 
+        else:
+            result.append(w.capitalize())  
+    return " ".join(result)
 
 def title_case(text):
     #  "jOHN doe" -> "John Doe"
@@ -22,7 +33,7 @@ for col in ["First Name", "Last Name", "Phonetic spelling", "Research adviser fi
         df[col] = df[col].apply(title_case)  # E.g. "aLIce" -> "Alice"
 
 if "Title" in df.columns:
-    df["Title"] = df["Title"].apply(sentence_case)  #  "QUANTUM CIRCUIT DESIGN" -> "Quantum circuit design"
+    df["Title"] = df["Title"].apply(smart_title)  #  "QUANTUM CIRCUIT DESIGN" -> "Quantum circuit design"
 
 if "email" in df.columns:
     df["email"] = df["email"].apply(lower_case)
@@ -30,7 +41,7 @@ if "email" in df.columns:
 if "Research adviser email" in df.columns:
     df["Research adviser email"] = df["Research adviser email"].apply(lower_case)
 
-df = pd.read_excel(EXCEL_PATH).fillna("")
+
 
 headers = {"Content-Type": "application/json"}
 if USE_PROD:

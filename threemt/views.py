@@ -26,7 +26,7 @@ class GetThreeMtAPIView(APIView):
         if not poster_id:
             return Response({
                 "ThreeMT_posters": [],
-                "status": "Thesis ID not provided"
+                "status": "Three Minute Thesis ID not provided"
             }, status=status.HTTP_400_BAD_REQUEST)
 
         # Validate that poster_id is an integer
@@ -35,14 +35,14 @@ class GetThreeMtAPIView(APIView):
         except ValueError:
             return Response({
                 "ThreeMT_posters": [],
-                "status": "Invalid Thesis ID (not an integer)"
+                "status": "Invalid Three Minute Thesis ID (not an integer)"
             }, status=status.HTTP_400_BAD_REQUEST)
         
         # Ensure poster_id is within 401-499
         if poster_id < 401 or poster_id > 499:
             return Response({
                 "ThreeMT_posters": [],
-                "status": "Thesis ID must be between 401 and 499"
+                "status": "Three Minute Thesis ID must be between 401 and 499"
             }, status=status.HTTP_400_BAD_REQUEST)
 
         # Check if poster exists in Students table
@@ -51,7 +51,7 @@ class GetThreeMtAPIView(APIView):
         except Students.DoesNotExist:
             return Response({
                 "ThreeMT_posters": [],
-                "status": "Not a Valid Thesis Id"
+                "status": "Not a valid Three Minute Thesis ID"
             }, status=status.HTTP_404_NOT_FOUND)
 
         # Check if a ThreeMt entry exists for that poster & current judge
