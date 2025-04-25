@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'admindashboard', # Admin Dashboard
 ]
 
 REST_FRAMEWORK = {
