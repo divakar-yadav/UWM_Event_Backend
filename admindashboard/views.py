@@ -9,7 +9,9 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from signup.models import User
 from django.db.models import Avg, Count, F
 from django.db.models.functions import Round
-
+import io
+import xlsxwriter
+from django.http import HttpResponse
 
 CATEGORY_MODEL_MAP = {
     '3mt': ThreeMt,
@@ -208,9 +210,7 @@ def student_judge_status(request):
     return Response(result)
 
 
-import io
-import xlsxwriter
-from django.http import HttpResponse
+
 
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
