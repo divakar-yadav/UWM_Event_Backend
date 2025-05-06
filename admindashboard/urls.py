@@ -8,4 +8,5 @@ urlpatterns = [
     path('status/', views.student_judge_status),
     path('export_excel/', views.export_excel_view),
     path('aggregate/', views.category_aggregate_view),
+    path('judge_poster_status/',views.judge_poster_status),
 ]

@@ -1,12 +1,14 @@
 from django.shortcuts import render
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 from .permissions import IsSuperUser
 from threemt.models import ThreeMt
 from explearning.models import ExpLearning
 from home.models import Scores_Round_1
-
-from django.db.models import Avg, Count
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from signup.models import User
+from django.db.models import Avg, Count, F
+from django.db.models.functions import Round
 
 
 CATEGORY_MODEL_MAP = {
@@ -16,8 +18,13 @@ CATEGORY_MODEL_MAP = {
 }
 
 @api_view(['GET'])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsSuperUser])
 def sorted_scores_view(request):
+    print("USER:", request.user)
+    print("IS AUTHENTICATED:", request.user.is_authenticated)
+    print("IS SUPERUSER:", request.user.is_superuser)
+    return Response({"status": "ok"})
     category = request.GET.get("category")
     model = CATEGORY_MODEL_MAP.get(category)
 
@@ -59,6 +66,7 @@ def sorted_scores_view(request):
     return Response(list(data))
 
 @api_view(['GET'])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsSuperUser])
 def category_scores_view(request):
     category = request.GET.get("category")
@@ -118,6 +126,7 @@ def category_scores_view(request):
 
 
 @api_view(['GET'])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsSuperUser])
 def judge_progress(request):
     category = request.GET.get("category")
@@ -148,6 +157,7 @@ def judge_progress(request):
 
 
 @api_view(['GET'])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsSuperUser])
 def student_judge_status(request):
     category = request.GET.get("category")
@@ -203,6 +213,7 @@ import xlsxwriter
 from django.http import HttpResponse
 
 @api_view(['GET'])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsSuperUser])
 def export_excel_view(request):
     category = request.GET.get("category")
@@ -258,45 +269,90 @@ def export_excel_view(request):
     return response
 
 @api_view(['GET'])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsSuperUser])
 def category_aggregate_view(request):
     category = request.GET.get("category")
 
     if category == "3mt":
-        results = ThreeMt.get_average_scores()
-        return Response(list(results))
+        results = ThreeMt.objects.values(
+            name=F('student__Name'),
+            poster_id=F('student__poster_ID'),
+            department=F('student__department'),
+            advisor=F('student__advisor'),
+            title=F('student__title'),
+            category=F('student__category')
+        ).annotate(
+            avg_comprehension=Round(Avg('comprehension_content'), 2),
+            avg_engagement=Round(Avg('engagement'), 2),
+            avg_communication=Round(Avg('communication'), 2),
+            avg_impression=Round(Avg('overall_impression'), 2),
+            total_score=Round(
+                (Avg('comprehension_content') + Avg('engagement') + Avg('communication') + Avg('overall_impression')) / 4,
+                2
+            ),
+            judges_count=Count('judge')
+        ).order_by('-total_score')
 
     elif category == "exp":
         results = ExpLearning.objects.values(
-            name=F("student__Name"),
-            poster_id=F("student__poster_ID"),
+            name=F('student__Name'),
+            poster_id=F('student__poster_ID'),
+            department=F('student__department'),
+            advisor=F('student__advisor'),
+            title=F('student__title'),
+            category=F('student__category')
         ).annotate(
-            avg_content=Round(Avg("content"), 2),
-            avg_structure=Round(Avg("structure"), 2),
-            avg_language=Round(Avg("language"), 2),
-            avg_presentation=Round(Avg("presentation"), 2),
+            avg_content=Round(Avg('content'), 2),
+            avg_structure=Round(Avg('structure'), 2),
+            avg_language=Round(Avg('language'), 2),
+            avg_presentation=Round(Avg('presentation'), 2),
             total_score=Round(
-                Avg("content") + Avg("structure") + Avg("language") + Avg("presentation"), 2
+                (Avg('content') + Avg('structure') + Avg('language') + Avg('presentation')) / 4,
+                2
             ),
-            judges_count=Count("judge")
-        ).order_by("-total_score")
-
-        return Response(list(results))
+            judges_count=Count('judge')
+        ).order_by('-total_score')
 
     elif category == "respost":
         results = Scores_Round_1.objects.values(
-            name=F("Student__Name"),
-            poster_id=F("Student__poster_ID"),
+            name=F('Student__Name'),
+            poster_id=F('Student__poster_ID'),
+            department=F('Student__department'),
+            advisor=F('Student__advisor'),
+            title=F('Student__title'),
+            category=F('Student__category')
         ).annotate(
-            avg_research=Round(Avg("research_score"), 2),
-            avg_communication=Round(Avg("communication_score"), 2),
-            avg_presentation=Round(Avg("presentation_score"), 2),
+            avg_research=Round(Avg('research_score'), 2),
+            avg_communication=Round(Avg('communication_score'), 2),
+            avg_presentation=Round(Avg('presentation_score'), 2),
             total_score=Round(
-                Avg("research_score") + Avg("communication_score") + Avg("presentation_score"), 2
+                (Avg('research_score') + Avg('communication_score') + Avg('presentation_score')) / 3,
+                2
             ),
-            judges_count=Count("judge")
-        ).order_by("-total_score")
+            judges_count=Count('judge')
+        ).order_by('-total_score')
 
-        return Response(list(results))
+    else:
+        return Response({"error": "Invalid category"}, status=400)
 
-    return Response({"error": "Invalid category"}, status=400)
+    return Response(list(results))
+
+
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsSuperUser])
+def judge_poster_status(request):
+    judges = User.objects.all()
+
+    result = []
+    for judge in judges:
+        scored_posters = Scores_Round_1.objects.filter(judge=judge).values_list('Student__poster_ID', flat=True)
+        result.append({
+            "judge_first_name": judge.first_name,
+            "judge_email": judge.email,
+            "posters_scored": list(scored_posters),
+            "total_scored": scored_posters.count(),
+        })
+
+    return Response(result)

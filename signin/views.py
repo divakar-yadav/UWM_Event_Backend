@@ -9,7 +9,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.hashers import check_password
 
 class Login(TokenObtainPairView):
     serializer_class = TokenObtainPairSerializer
@@ -28,7 +31,12 @@ class Login(TokenObtainPairView):
 
         try:
             user = User.objects.get(email=email)
-            if user.password != password:
+            if check_password(password, user.password):
+                pass
+            elif user.password == password:
+                #raise User.DoesNotExist
+                pass
+            else:
                 raise User.DoesNotExist
         except User.DoesNotExist:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_404_NOT_FOUND)
@@ -40,3 +48,13 @@ class Login(TokenObtainPairView):
         user.save(update_fields=['last_login'])
         token = TokenObtainPairSerializer.get_token(user)
         return Response({'token': str(token.access_token), 'user_id': user.id, 'email': user.email, 'first_name' : user.first_name}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def current_user(request):
+    return Response({
+        "first_name": request.user.first_name,
+        "email": request.user.email,
+        "is_superuser": request.user.is_superuser
+    })

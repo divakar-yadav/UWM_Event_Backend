@@ -27,5 +27,5 @@ urlpatterns = [
     path('api/explearning/', include('explearning.urls')),
     path('api/three-mt/', include('threemt.urls')),
     path("api/", include("index.urls")),
-    path('api/spa-283771828/', include('admindashboard.urls'))
+    path('api/pa-283771828/', include('admindashboard.urls'))
 ]
