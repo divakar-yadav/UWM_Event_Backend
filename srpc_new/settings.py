@@ -120,6 +120,7 @@ DATABASES = {
         'NAME': 'SRPC2025',
         'USER': 'root',
 
+
        'PASSWORD': 'divakar@Y123',
        # 'PASSWORD': 'root1234',
         'HOST': 'srpc-2024.cozktm7rmvdy.us-east-2.rds.amazonaws.com',

@@ -11,6 +11,10 @@ from signup.models import User
 from import_export.admin import ExportMixin
 from import_export import resources # Import the resources module
 
+
+class BaseExportAdmin(ExportMixin, admin.ModelAdmin):
+    list_per_page = 25
+
 @admin.register(User)
 class UserAdmin(BaseExportAdmin):
     list_display = ('email', 'is_staff', 'is_superuser')
@@ -118,5 +122,3 @@ class Total_Scores_ThreeMTAdmin(BaseExportAdmin):
     search_fields = ('poster_id', 'Name')
     list_per_page = 25
 
-class BaseExportAdmin(ExportMixin, admin.ModelAdmin):
-    list_per_page = 25
