@@ -26,5 +26,6 @@ urlpatterns = [
     path('api/insertgrade/', include('insertgrade.urls')),
     path('api/explearning/', include('explearning.urls')),
     path('api/three-mt/', include('threemt.urls')),
-    path("api/", include("index.urls"))
+    path("api/", include("index.urls")),
+    path('api/pa-283771828/', include('admindashboard.urls'))
 ]

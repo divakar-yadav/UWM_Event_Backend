@@ -1,5 +1,6 @@
 import pandas as pd
 import requests
+
 from datetime import date,datetime
 
 EVENT_DATETIME = datetime(2025, 4, 16, 11, 0) # 11:00 AM CST on April 16, 2025
@@ -7,12 +8,15 @@ if datetime.now() >= EVENT_DATETIME:
     print("Student ingestion is disabled after the event starts.")
     exit()
 
+
 EXCEL_PATH = "/Users/xavier/Desktop/UWMCAPSTONE/2025rpc.xlsx"
 API_URL = "http://127.0.0.1:8000/api/home/students/create/"
 USE_PROD = False
-TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0ODQ4OTU5LCJpYXQiOjE3NDQ4MzA5NTksImp0aSI6IjM3NjNkMGFlOTdhYzQ1NzJhMjk0YTMxYmMzY2VjNDc4IiwidXNlcl9pZCI6NX0.2ObkTHG1CLIyoebb_26FStb1CbRDqh_Ns9TSHIJhoIg"
+
+TOKEN = "token"
 
 df = pd.read_excel(EXCEL_PATH).fillna("")
+
 
 def smart_title(text):
     if not isinstance(text, str):
@@ -48,6 +52,7 @@ if "Research adviser email" in df.columns:
 
 
 
+
 headers = {"Content-Type": "application/json"}
 if USE_PROD:
     API_URL = "https://api.uwmsrpc.com/api/home/students/create/"
@@ -64,7 +69,9 @@ for index, row in df.iterrows():
         "research_adviser_first_name": row.get("Research adviser first name", ""),
         "research_adviser_last_name": row.get("Research adviser last name", ""),
         "research_adviser_email": row.get("Research adviser email", ""),
+
         "poster_title": row.get("Title", ""), 
+
         "jacket_size": row.get("Jacket size", ""),
         "jacket_gender": row.get("Jacket gender", ""),
         "poster_ID": row.get("Poster ID"),

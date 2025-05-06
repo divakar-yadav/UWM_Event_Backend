@@ -63,12 +63,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'admindashboard', # Admin Dashboard
+    'import_export', # Import Export
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
-    ]
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
 }
 
 
@@ -114,10 +119,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'SRPC2025',
         'USER': 'root',
+
        'PASSWORD': 'divakar@Y123',
        # 'PASSWORD': 'root1234',
         'HOST': 'srpc-2024.cozktm7rmvdy.us-east-2.rds.amazonaws.com',
         #'HOST': 'localhost',
+
         'PORT': '3306',  # usually 3306 for MySQL
     }
 }

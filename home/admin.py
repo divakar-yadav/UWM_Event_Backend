@@ -8,10 +8,11 @@ from .models import (
     Total_Scores_Round_1_Graduate, Total_Scores_Round_1_Undergraduate,
 )
 from signup.models import User
-
+from import_export.admin import ExportMixin
+from import_export import resources # Import the resources module
 
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(BaseExportAdmin):
     list_display = ('email', 'is_staff', 'is_superuser')
     list_display_links = ('email',)
     list_filter = ('email',)
@@ -20,7 +21,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 @admin.register(Students)
-class StudentsAdmin(admin.ModelAdmin):
+class StudentsAdmin(BaseExportAdmin):
     list_display = ('Name', 'poster_ID', 'judged_count_round_1', 'finalist')
     list_display_links = ('Name', 'poster_ID')
     list_filter = ('Name', 'poster_ID')
@@ -40,7 +41,7 @@ class StudentsAdmin(admin.ModelAdmin):
 
 
 @admin.register(Scores_Round_1)
-class Scores_Round_1Admin(admin.ModelAdmin):
+class Scores_Round_1Admin(BaseExportAdmin):
     list_display = ('judge', 'Student', 'research_score',
                     'communication_score', 'presentation_score')
     list_display_links = ('judge', 'Student')
@@ -50,7 +51,7 @@ class Scores_Round_1Admin(admin.ModelAdmin):
 
 
 @admin.register(Total_Scores_Round_1_Graduate)
-class Total_Scores_Round_1_GraduateAdmin(admin.ModelAdmin):
+class Total_Scores_Round_1_GraduateAdmin(BaseExportAdmin):
     list_display = ('poster_id', 'Name', 'email', 'total_score', 'judged_count',
                     'avg_research_score', 'avg_communication_score', 'avg_presentation_score')
     list_display_links = ('poster_id', 'Name')
@@ -60,7 +61,7 @@ class Total_Scores_Round_1_GraduateAdmin(admin.ModelAdmin):
 
 
 @admin.register(Total_Scores_Round_1_Undergraduate)
-class Total_Scores_Round_1_UndergraduateAdmin(admin.ModelAdmin):
+class Total_Scores_Round_1_UndergraduateAdmin(BaseExportAdmin):
     list_display = ('poster_id', 'Name', 'email', 'total_score', 'judged_count',
                     'avg_research_score', 'avg_communication_score', 'avg_presentation_score')
     list_display_links = ('poster_id', 'Name')
@@ -70,7 +71,7 @@ class Total_Scores_Round_1_UndergraduateAdmin(admin.ModelAdmin):
 
 
 @admin.register(ExpLearning)
-class ExpLearningAdmin(admin.ModelAdmin):
+class ExpLearningAdmin(BaseExportAdmin):
     list_display = ('judge', 'student', 'reflection_score', 'communication_score', 'presentation_score', 'feedback', 'total_score')
     list_display_links = ('judge', 'student')
     list_filter = ('judge', 'student')
@@ -83,7 +84,7 @@ class ExpLearningAdmin(admin.ModelAdmin):
 
 
 @admin.register(ThreeMt)
-class ThreeMtAdmin(admin.ModelAdmin):
+class ThreeMtAdmin(BaseExportAdmin):
     list_display = ('judge', 'student', 'comprehension_content', 'engagement', 'communication', 'overall_impression', 'feedback', 'total_score')
     list_display_links = ('judge', 'student')
     list_filter = ('judge', 'student')
@@ -98,7 +99,7 @@ class ThreeMtAdmin(admin.ModelAdmin):
 
 # ✅ NEW: Admin for Total_Scores_Exp_Learning
 @admin.register(Total_Scores_Exp_Learning)
-class Total_Scores_Exp_LearningAdmin(admin.ModelAdmin):
+class Total_Scores_Exp_LearningAdmin(BaseExportAdmin):
     list_display = ('poster_id', 'Name', 'email', 'total_score', 'judged_count',
                     'avg_reflection_score', 'avg_communication_score', 'avg_presentation_score')
     list_display_links = ('poster_id', 'Name')
@@ -109,10 +110,13 @@ class Total_Scores_Exp_LearningAdmin(admin.ModelAdmin):
 
 # ✅ NEW: Admin for Total_Scores_ThreeMT
 @admin.register(Total_Scores_ThreeMT)
-class Total_Scores_ThreeMTAdmin(admin.ModelAdmin):
+class Total_Scores_ThreeMTAdmin(BaseExportAdmin):
     list_display = ('poster_id', 'Name', 'email', 'total_score', 'judged_count',
                     'avg_comprehension_content', 'avg_engagement', 'avg_communication', 'avg_overall_impression')
     list_display_links = ('poster_id', 'Name')
     list_filter = ('poster_id', 'Name')
     search_fields = ('poster_id', 'Name')
+    list_per_page = 25
+
+class BaseExportAdmin(ExportMixin, admin.ModelAdmin):
     list_per_page = 25
