@@ -1,13 +1,57 @@
 import pandas as pd
 import requests
-from datetime import date
+
+from datetime import date,datetime
+
+EVENT_DATETIME = datetime(2025, 4, 16, 11, 0) # 11:00 AM CST on April 16, 2025
+if datetime.now() >= EVENT_DATETIME:
+    print("Student ingestion is disabled after the event starts.")
+    exit()
+
 
 EXCEL_PATH = "/Users/xavier/Desktop/UWMCAPSTONE/2025rpc.xlsx"
 API_URL = "http://127.0.0.1:8000/api/home/students/create/"
 USE_PROD = False
+
 TOKEN = "token"
 
 df = pd.read_excel(EXCEL_PATH).fillna("")
+
+
+def smart_title(text):
+    if not isinstance(text, str):
+        return text
+    words = text.split()
+    result = []
+    for w in words:
+        if w.isupper():
+            result.append(w) 
+        else:
+            result.append(w.capitalize())  
+    return " ".join(result)
+
+def title_case(text):
+    #  "jOHN doe" -> "John Doe"
+    return text.title() if isinstance(text, str) else text
+
+def lower_case(text):
+    # "JOHN.DOE@UWM.EDU" -> "john.doe@uwm.edu"
+    return text.lower() if isinstance(text, str) else text
+for col in ["First Name", "Last Name", "Phonetic spelling", "Research adviser first name", "Research adviser last name"]:
+    if col in df.columns:
+        df[col] = df[col].apply(title_case)  # E.g. "aLIce" -> "Alice"
+
+if "Title" in df.columns:
+    df["Title"] = df["Title"].apply(smart_title)  #  "QUANTUM CIRCUIT DESIGN" -> "Quantum circuit design"
+
+if "email" in df.columns:
+    df["email"] = df["email"].apply(lower_case)
+
+if "Research adviser email" in df.columns:
+    df["Research adviser email"] = df["Research adviser email"].apply(lower_case)
+
+
+
 
 headers = {"Content-Type": "application/json"}
 if USE_PROD:
@@ -25,7 +69,9 @@ for index, row in df.iterrows():
         "research_adviser_first_name": row.get("Research adviser first name", ""),
         "research_adviser_last_name": row.get("Research adviser last name", ""),
         "research_adviser_email": row.get("Research adviser email", ""),
-        "poster_title": row.get("Title", "")[:100], # now to 100 characters ,but need to check with the Divakar
+
+        "poster_title": row.get("Title", ""), 
+
         "jacket_size": row.get("Jacket size", ""),
         "jacket_gender": row.get("Jacket gender", ""),
         "poster_ID": row.get("Poster ID"),

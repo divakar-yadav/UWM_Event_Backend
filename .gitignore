@@ -1,11 +1,33 @@
-/venv
-# Ignore Python bytecode files
+# Ignore virtual environment
+/venv/
+
+# Ignore Python bytecode and cache
 *.pyc
 *.pyo
 __pycache__/
+**/__pycache__/
 
-# Ignore all compiled cache inside Django migrations
+# Ignore all .pyc files inside any __pycache__ directory (redundant but safe)
+**/__pycache__/*.pyc
+
+# Ignore all compiled migration cache
 **/migrations/__pycache__/
 
-# But keep actual migration scripts
+# Keep actual migration Python files (not pyc or pyo)
 !**/migrations/*.py
+
+# Ignore macOS specific files
+.DS_Store
+
+# Ignore sqlite DBs if any
+*.sqlite3
+
+# Ignore env and IDE config files
+.env
+*.code-workspace
+*.vscode/
+.idea/
+
+# Optional: skip log files or media dumps
+*.log
+/media/

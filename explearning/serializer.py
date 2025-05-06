@@ -13,18 +13,28 @@ class ExpLearningSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+# class UpdateExpLearningSerializer(serializers.ModelSerializer):
+#     judge = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)  # Accept only user ID
+#     poster_id = serializers.IntegerField(read_only=True)  # Explicitly define poster_ID as primary key
+
+#     class Meta:
+#         model = ExpLearning
+#         fields = ['poster_id', 'judge','student', 'reflection_score', 
+#                   'communication_score', 'presentation_score', 'feedback']
+
+#     def update(self, instance, validated_data):
+#         # Handle judge field separately if it's being updated
+#         if 'judge' in validated_data:
+#             instance.judge = validated_data.pop('judge')
+        
+#         return super().update(instance, validated_data)
+
 class UpdateExpLearningSerializer(serializers.ModelSerializer):
-    judge = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)  # Accept only user ID
-    poster_id = serializers.IntegerField(read_only=True)  # Explicitly define poster_ID as primary key
+    judge = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
+    poster_id = serializers.IntegerField()
 
     class Meta:
         model = ExpLearning
-        fields = ['poster_id', 'judge','student', 'reflection_score', 
+        fields = ['poster_id', 'judge', 'student', 'reflection_score',
                   'communication_score', 'presentation_score', 'feedback']
-
-    def update(self, instance, validated_data):
-        # Handle judge field separately if it's being updated
-        if 'judge' in validated_data:
-            instance.judge = validated_data.pop('judge')
-        
-        return super().update(instance, validated_data)
+        # ✅ No `id` in this list
