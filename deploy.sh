@@ -21,7 +21,7 @@ echo "Deploying backend..."
 cd "$BACKEND_PATH" || { echo "Failed to navigate to backend path"; exit 1; }
 
 git pull || { echo "Failed to pull backend code"; exit 1; }
-
+pip install -r requirements.txt || { echo "Failed to install Python dependencies"; exit 1; }
 sudo systemctl restart gunicorn-srpc || { echo "Failed to restart gunicorn-srpc"; exit 1; }
 
 echo "Backend deployed successfully. Deployment complete."
