@@ -17,7 +17,7 @@ class Students(models.Model):
     research_adviser_last_name = models.CharField(
         max_length=100, null=True, blank=True)
     research_adviser_email = models.EmailField(null=True, blank=True)
-    poster_title = models.CharField(max_length=100, null=True, blank=True)
+    poster_title = models.CharField(max_length=500, null=True, blank=True)
     jacket_size = models.CharField(max_length=100, null=True, blank=True)
     jacket_gender = models.CharField(max_length=100, null=True, blank=True)
     id = models.AutoField(primary_key=True)
