@@ -119,9 +119,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'SRPC2025',
         'USER': 'root',
-        'PASSWORD': 'root1234',
-        #'HOST': 'srpc-2024.cozktm7rmvdy.us-east-2.rds.amazonaws.com',
-        'HOST': 'localhost',  # for local development
+        'PASSWORD': 'divakar@Y123',
+        #'PASSWORD': 'root1234',
+        'HOST': 'srpc-2024.cozktm7rmvdy.us-east-2.rds.amazonaws.com',
+        #'HOST': 'localhost',  # for local development
         'PORT': '3306',  # usually 3306 for MySQL
     }
 }
