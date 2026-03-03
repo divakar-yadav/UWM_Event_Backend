@@ -11,9 +11,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from datetime import timedelta
+import os
 from pathlib import Path
 from rest_framework.renderers import JSONRenderer
 import pymysql
+from dotenv import load_dotenv
+
+load_dotenv()
 
 pymysql.install_as_MySQLdb()
 
@@ -30,8 +34,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@r_vhw8-vx^d8vbb89(jk7og4v)urz1zmw7zic@%)@(&qz%n*w'
-
+#SECRET_KEY = 'django-insecure-@r_vhw8-vx^d8vbb89(jk7og4v)urz1zmw7zic@%)@(&qz%n*w'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -119,14 +123,15 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'SRPC2026',
         'USER': 'root',
-
-
-       #'PASSWORD': 'divakar@Y123',
         'PASSWORD': 'root1234',
-       # 'HOST': 'srpc-2024.cozktm7rmvdy.us-east-2.rds.amazonaws.com',
         'HOST': 'localhost',
-
         'PORT': '3306',  # usually 3306 for MySQL
+        
+        # 'NAME': os.environ.get('DB_NAME'),
+        # 'USER': os.environ.get('DB_USER'),
+        # 'PASSWORD': os.environ.get('DB_PASSWORD'),
+        # 'HOST': os.environ.get('DB_HOST'),
+        'CONN_MAX_AGE': 60,
     }
 }
 # this is a general user root and any database can decide to give its access to root.
