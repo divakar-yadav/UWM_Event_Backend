@@ -2,12 +2,12 @@ import pandas as pd
 import requests
 from datetime import datetime
 
-EXCEL_PATH = "/Users/xavier/Desktop/UWMCAPSTONE/SRPCjudges.xlsx"
+EXCEL_PATH = "/Users/xavier/Desktop/UWMSRPC/SRPCjudges26.xlsx"
 API_URL = "http://127.0.0.1:8000/api/signup/"
 USE_PROD = False
 TOKEN = "token_here"  
 
-REGISTRATION_DEADLINE = datetime(2025, 4, 25, 11, 0)
+REGISTRATION_DEADLINE = datetime(2026, 4, 25, 11, 0)
 if datetime.now() >= REGISTRATION_DEADLINE:
     print("Judge registration is disabled after the deadline.")
     exit()
@@ -51,10 +51,10 @@ for index, row in df.iterrows():
 
     response = requests.post(API_URL, json=payload, headers=headers)
     if response.status_code == 400 and "User already exists" in response.text:
-        print(f"⚠️ SKIPPED Row {index + 1}: {email} already exists.")
+        print(f"SKIPPED Row {index + 1}: {email} already exists.")
         continue
     if response.status_code != 201:
-        print(f"❌ ERROR Row {index + 1}: {payload['email']} => {response.status_code}")
+        print(f"ERROR Row {index + 1}: {payload['email']} => {response.status_code}")
         print("    ↳", response.text)
     else:
-        print(f"✅ Success Row {index + 1}: {payload['email']} registered.")
+        print(f"Success Row {index + 1}: {payload['email']} registered.")

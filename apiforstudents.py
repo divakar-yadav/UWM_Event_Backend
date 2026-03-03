@@ -3,13 +3,13 @@ import requests
 
 from datetime import date,datetime
 
-EVENT_DATETIME = datetime(2025, 4, 16, 11, 0) # 11:00 AM CST on April 16, 2025
+EVENT_DATETIME = datetime(2026, 4, 16, 11, 0) # 11:00 AM CST on April 16, 2026
 if datetime.now() >= EVENT_DATETIME:
     print("Student ingestion is disabled after the event starts.")
     exit()
 
 
-EXCEL_PATH = "/Users/xavier/Desktop/UWMCAPSTONE/2025rpc.xlsx"
+EXCEL_PATH = "/Users/xavier/Desktop/UWMSRPC/2026rpc.xlsx"
 API_URL = "http://127.0.0.1:8000/api/home/students/create/"
 USE_PROD = False
 

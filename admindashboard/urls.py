@@ -9,4 +9,5 @@ urlpatterns = [
     path('export_excel/', views.export_excel_view),
     path('aggregate/', views.category_aggregate_view),
     path('judge_poster_status/',views.judge_poster_status),
+    path("category_aggregate/", views.category_aggregate_view),
 ]

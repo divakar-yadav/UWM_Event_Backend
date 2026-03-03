@@ -12,6 +12,8 @@ from django.db.models.functions import Round
 import io
 import xlsxwriter
 from django.http import HttpResponse
+from home.models import Students
+from django.db.models import Avg, Count, F, FloatField, ExpressionWrapper
 
 CATEGORY_MODEL_MAP = {
     '3mt': ThreeMt,
@@ -26,7 +28,7 @@ def sorted_scores_view(request):
     print("USER:", request.user)
     print("IS AUTHENTICATED:", request.user.is_authenticated)
     print("IS SUPERUSER:", request.user.is_superuser)
-    return Response({"status": "ok"})
+    #return Response({"status": "ok"})
     category = request.GET.get("category")
     model = CATEGORY_MODEL_MAP.get(category)
 
@@ -45,12 +47,21 @@ def sorted_scores_view(request):
 
     elif category == "exp":
         data = (
-            model.objects.values('student__Name', 'student__poster_ID')
+            ExpLearning.objects
+            .values("student__Name", "student__poster_ID")
             .annotate(
-                avg_score=Avg('content') + Avg('presentation') + Avg('structure') + Avg('language'),
-                judge_count=Count('judge')
+                avg_reflection=Avg("reflection_score"),
+                avg_communication=Avg("communication_score"),
+                avg_presentation=Avg("presentation_score"),
+                judge_count=Count("judge", distinct=True),
             )
-            .order_by('-avg_score')
+            .annotate(
+                avg_score=ExpressionWrapper(
+                    F("avg_reflection") + F("avg_communication") + F("avg_presentation"),
+                    output_field=FloatField(),
+                )
+            )
+            .order_by("-avg_score")
         )
 
     elif category == "respost":
@@ -163,47 +174,46 @@ def judge_progress(request):
 @permission_classes([IsSuperUser])
 def student_judge_status(request):
     category = request.GET.get("category")
-    model = CATEGORY_MODEL_MAP.get(category)
-
-    if not model:
+    required = int(request.GET.get("required", 4))  # dynamic
+    rng = CATEGORY_RANGES.get(category)
+    if not rng:
         return Response({"error": "Invalid category"}, status=400)
 
-    if category == "3mt":
-        data = (
-            model.objects.values("student__Name", "student__poster_ID")
-            .annotate(
-                scored=Count("judge", distinct=True),
-            )
-        )
+    lo, hi = rng
+    students = list(
+        Students.objects.filter(poster_ID__gte=lo, poster_ID__lte=hi)
+        .values("poster_ID", "Name")
+        .order_by("poster_ID")
+    )
 
+    # map poster -> distinct judge count
+    if category == "respost":
+        counts = (Scores_Round_1.objects
+                  .filter(Student__poster_ID__gte=lo, Student__poster_ID__lte=hi)
+                  .values("Student__poster_ID")
+                  .annotate(scored=Count("judge", distinct=True)))
+        m = {c["Student__poster_ID"]: c["scored"] for c in counts}
     elif category == "exp":
-        data = (
-            model.objects.values("student__Name", "student__poster_ID")
-            .annotate(
-                scored=Count("judge", distinct=True),
-            )
-        )
+        counts = (ExpLearning.objects
+                  .filter(student__poster_ID__gte=lo, student__poster_ID__lte=hi)
+                  .values("student__poster_ID")
+                  .annotate(scored=Count("judge", distinct=True)))
+        m = {c["student__poster_ID"]: c["scored"] for c in counts}
+    else:  # 3mt
+        counts = (ThreeMt.objects
+                  .filter(student__poster_ID__gte=lo, student__poster_ID__lte=hi)
+                  .values("student__poster_ID")
+                  .annotate(scored=Count("judge", distinct=True)))
+        m = {c["student__poster_ID"]: c["scored"] for c in counts}
 
-    elif category == "respost":
-        data = (
-            model.objects.values("Student__Name", "Student__poster_ID")
-            .annotate(
-                scored=Count("judge", distinct=True),
-            )
-        )
-
-    else:
-        return Response({"error": "Unsupported category"}, status=400)
-
-    # Add `total` if you have fixed number of judges per student (e.g., 4)
-    total_judges = 4
     result = []
-    for d in data:
+    for s in students:
+        pid = s["poster_ID"]
         result.append({
-            "student": d.get("student__Name") or d.get("Student__Name"),
-            "poster_id": d.get("student__poster_ID") or d.get("Student__poster_ID"),
-            "scored": d["scored"],
-            "total": total_judges,
+            "student": s["Name"],
+            "poster_id": pid,
+            "scored": int(m.get(pid, 0)),
+            "total": required,
             "category": category,
         })
 
@@ -231,8 +241,8 @@ def export_excel_view(request):
 
     elif category == "exp":
         scores = model.objects.values('student__Name', 'student__poster_ID').annotate(
-            avg_score=Avg('content') + Avg('presentation') + Avg('structure') + Avg('language'),
-            judge_count=Count('judge')
+            avg_score=Avg('reflection_score') + Avg('communication_score') + Avg('presentation_score'),
+            judge_count=Count('judge', distinct=True)
         ).order_by('-avg_score')
 
     elif category == "respost":
@@ -274,85 +284,120 @@ def export_excel_view(request):
 def category_aggregate_view(request):
     category = request.GET.get("category")
 
+    def format_rows(results):
+        out = []
+        for r in results:
+            advisor = (f'{r.get("adv_first","")} {r.get("adv_last","")}'.strip()) or "Unknown"
+            out.append({
+                "name": r.get("name") or "Unknown",
+                "poster_id": r.get("poster_num"),
+                "department": r.get("department") or "Unknown",
+                "advisor": advisor,
+                "title": r.get("title") or "Unknown",
+                "total_score": r.get("total_score"),
+                "judges_count": r.get("judges_count"),
+            })
+        return out
+
     if category == "3mt":
         results = ThreeMt.objects.values(
-            name=F('student__Name'),
-            poster_id=F('student__poster_ID'),
-            department=F('student__department'),
-            advisor=F('student__advisor'),
-            title=F('student__title'),
-            category=F('student__category')
+            name=F("student__Name"),
+            poster_num=F("student__poster_ID"),
+            department=F("student__department"),
+            title=F("student__poster_title"),
+            adv_first=F("student__research_adviser_first_name"),
+            adv_last=F("student__research_adviser_last_name"),
         ).annotate(
-            avg_comprehension=Round(Avg('comprehension_content'), 2),
-            avg_engagement=Round(Avg('engagement'), 2),
-            avg_communication=Round(Avg('communication'), 2),
-            avg_impression=Round(Avg('overall_impression'), 2),
             total_score=Round(
-                (Avg('comprehension_content') + Avg('engagement') + Avg('communication') + Avg('overall_impression')) / 4,
+                (Avg("comprehension_content") + Avg("engagement") + Avg("communication") + Avg("overall_impression")) / 4,
                 2
             ),
-            judges_count=Count('judge')
-        ).order_by('-total_score')
+            judges_count=Count("judge", distinct=True),
+        ).order_by("-total_score")
+
+        return Response(format_rows(results))
 
     elif category == "exp":
         results = ExpLearning.objects.values(
-            name=F('student__Name'),
-            poster_id=F('student__poster_ID'),
-            department=F('student__department'),
-            advisor=F('student__advisor'),
-            title=F('student__title'),
-            category=F('student__category')
+            name=F("student__Name"),
+            poster_num=F("student__poster_ID"),
+            department=F("student__department"),
+            title=F("student__poster_title"),
+            adv_first=F("student__research_adviser_first_name"),
+            adv_last=F("student__research_adviser_last_name"),
         ).annotate(
-            avg_content=Round(Avg('content'), 2),
-            avg_structure=Round(Avg('structure'), 2),
-            avg_language=Round(Avg('language'), 2),
-            avg_presentation=Round(Avg('presentation'), 2),
             total_score=Round(
-                (Avg('content') + Avg('structure') + Avg('language') + Avg('presentation')) / 4,
+                (Avg("reflection_score") + Avg("communication_score") + Avg("presentation_score")) / 3,
                 2
             ),
-            judges_count=Count('judge')
-        ).order_by('-total_score')
+            judges_count=Count("judge", distinct=True),
+        ).order_by("-total_score")
+
+        return Response(format_rows(results))
 
     elif category == "respost":
         results = Scores_Round_1.objects.values(
-            name=F('Student__Name'),
-            poster_id=F('Student__poster_ID'),
-            department=F('Student__department'),
-            advisor=F('Student__advisor'),
-            title=F('Student__title'),
-            category=F('Student__category')
+            name=F("Student__Name"),
+            poster_num=F("Student__poster_ID"),
+            department=F("Student__department"),
+            title=F("Student__poster_title"),
+            adv_first=F("Student__research_adviser_first_name"),
+            adv_last=F("Student__research_adviser_last_name"),
         ).annotate(
-            avg_research=Round(Avg('research_score'), 2),
-            avg_communication=Round(Avg('communication_score'), 2),
-            avg_presentation=Round(Avg('presentation_score'), 2),
             total_score=Round(
-                (Avg('research_score') + Avg('communication_score') + Avg('presentation_score')) / 3,
+                (Avg("research_score") + Avg("communication_score") + Avg("presentation_score")) / 3,
                 2
             ),
-            judges_count=Count('judge')
-        ).order_by('-total_score')
+            judges_count=Count("judge", distinct=True),
+        ).order_by("-total_score")
 
-    else:
-        return Response({"error": "Invalid category"}, status=400)
+        return Response(format_rows(results))
 
-    return Response(list(results))
+    return Response({"error": "Invalid category"}, status=400)
 
+CATEGORY_RANGES = {
+    "respost": (101, 299),
+    "exp": (301, 399),
+    "3mt": (401, 499),
+}
 
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsSuperUser])
 def judge_poster_status(request):
-    judges = User.objects.all()
+    category = request.GET.get("category")
+    rng = CATEGORY_RANGES.get(category)
+    if not rng:
+        return Response({"error": "Invalid category"}, status=400)
+
+    lo, hi = rng
+    total_posters = Students.objects.filter(poster_ID__gte=lo, poster_ID__lte=hi).count()
 
     result = []
-    for judge in judges:
-        scored_posters = Scores_Round_1.objects.filter(judge=judge).values_list('Student__poster_ID', flat=True)
+    for judge in User.objects.all():
+        if category == "respost":
+            ids = (Scores_Round_1.objects
+                   .filter(judge=judge, Student__poster_ID__gte=lo, Student__poster_ID__lte=hi)
+                   .values_list("Student__poster_ID", flat=True)
+                   .distinct())
+        elif category == "exp":
+            ids = (ExpLearning.objects
+                   .filter(judge=judge, student__poster_ID__gte=lo, student__poster_ID__lte=hi)
+                   .values_list("student__poster_ID", flat=True)
+                   .distinct())
+        else:  # 3mt
+            ids = (ThreeMt.objects
+                   .filter(judge=judge, student__poster_ID__gte=lo, student__poster_ID__lte=hi)
+                   .values_list("student__poster_ID", flat=True)
+                   .distinct())
+
+        ids_list = list(ids)
         result.append({
             "judge_first_name": judge.first_name,
             "judge_email": judge.email,
-            "posters_scored": list(scored_posters),
-            "total_scored": scored_posters.count(),
+            "posters_scored": ids_list,
+            "posters_scored_count": len(ids_list),
+            "total_posters": total_posters,
         })
 
     return Response(result)
