@@ -43,7 +43,7 @@ ALLOWED_HOSTS = [ "uwmsrpc26.com",
     "uwmsrpc26.com",
     "api.uwmsrpc26.com",
     "dashboard.uwmsrpc26.com","127.0.0.1"
-    "localhost","44.199.231.96"]
+    "localhost"]
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=300),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
