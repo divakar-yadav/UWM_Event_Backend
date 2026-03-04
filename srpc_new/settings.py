@@ -16,7 +16,6 @@ from pathlib import Path
 from rest_framework.renderers import JSONRenderer
 import pymysql
 from dotenv import load_dotenv
-
 #load_dotenv() # Load environment variables from .env file in the current directory
 load_dotenv("/home/ubuntu/.env") #production
 pymysql.install_as_MySQLdb()
@@ -123,15 +122,15 @@ WSGI_APPLICATION = 'srpc_new.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        #'NAME': 'SRPC2026',
-       # 'USER': 'root',
-       # 'PASSWORD': 'root1234',
-       # 'HOST': 'localhost',
+         'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'SRPC2026',
+        # 'USER': 'root',
+        # 'PASSWORD': 'root1234',
+        # 'HOST': 'localhost',
         'PORT': '3306',  # usually 3306 for MySQL
         
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
+         'NAME': os.environ.get('DB_NAME'),
+         'USER': os.environ.get('DB_USER'),
      'PASSWORD': os.environ.get('DB_PASSWORD'),
          'HOST': os.environ.get('DB_HOST'),
         'CONN_MAX_AGE': 60,
