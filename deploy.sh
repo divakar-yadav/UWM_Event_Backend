@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define paths
-FRONTEND_PATH="/home/ubuntu/SRPC-2025/UWM_Event_Frontend"
+FRONTEND_PATH="/home/ubuntu/SRPC-2026/UWM_Event_Frontend"
 BACKEND_PATH="$(pwd)"
 
 # Deploy Frontend

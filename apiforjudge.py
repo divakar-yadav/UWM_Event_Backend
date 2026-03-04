@@ -30,7 +30,7 @@ if "email" in df.columns:
 
 headers = {"Content-Type": "application/json"}
 if USE_PROD:
-    API_URL = "https://api.uwmsrpc.com/api/signup/"
+    API_URL = "https://api.uwmsrpc26.com/api/signup/"
     headers["Authorization"] = f"Bearer {TOKEN}"
 
 

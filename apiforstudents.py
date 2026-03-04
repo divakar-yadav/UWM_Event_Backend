@@ -55,7 +55,7 @@ if "Research adviser email" in df.columns:
 
 headers = {"Content-Type": "application/json"}
 if USE_PROD:
-    API_URL = "https://api.uwmsrpc.com/api/home/students/create/"
+    API_URL = "https://api.uwmsrpc26.com/api/home/students/create/"
     headers["Authorization"] = f"Bearer {TOKEN}"
 
 for index, row in df.iterrows():
