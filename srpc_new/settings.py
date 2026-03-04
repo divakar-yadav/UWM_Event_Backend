@@ -17,8 +17,8 @@ from rest_framework.renderers import JSONRenderer
 import pymysql
 from dotenv import load_dotenv
 
-load_dotenv()
-
+#load_dotenv() # Load environment variables from .env file in the current directory
+load_dotenv("/home/ubuntu/.env") #production
 pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,8 +39,11 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
-
+#ALLOWED_HOSTS = ['*'] #loca test
+ALLOWED_HOSTS = [ "uwmsrpc26.com",
+    "www.uwmsrpc26.com",
+    "api.uwmsrpc26.com",
+    "admin.uwmsrpc26.com"]
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=300),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
