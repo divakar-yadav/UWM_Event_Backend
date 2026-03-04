@@ -121,16 +121,16 @@ WSGI_APPLICATION = 'srpc_new.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'SRPC2026',
-        'USER': 'root',
-        'PASSWORD': 'root1234',
-        'HOST': 'localhost',
+        #'NAME': 'SRPC2026',
+       # 'USER': 'root',
+       # 'PASSWORD': 'root1234',
+       # 'HOST': 'localhost',
         'PORT': '3306',  # usually 3306 for MySQL
         
-        # 'NAME': os.environ.get('DB_NAME'),
-        # 'USER': os.environ.get('DB_USER'),
-        # 'PASSWORD': os.environ.get('DB_PASSWORD'),
-        # 'HOST': os.environ.get('DB_HOST'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+     'PASSWORD': os.environ.get('DB_PASSWORD'),
+         'HOST': os.environ.get('DB_HOST'),
         'CONN_MAX_AGE': 60,
     }
 }
