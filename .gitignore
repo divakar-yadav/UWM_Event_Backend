@@ -31,3 +31,5 @@ __pycache__/
 # Optional: skip log files or media dumps
 *.log
 /media/
+
+/srpc/settings.py
