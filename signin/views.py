@@ -53,8 +53,13 @@ class Login(TokenObtainPairView):
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def current_user(request):
+    group_names = list(request.user.groups.values_list("name", flat=True))
+    can_access_dashboard = request.user.is_superuser or ("DashboardAccess" in group_names)
+
     return Response({
         "first_name": request.user.first_name,
         "email": request.user.email,
-        "is_superuser": request.user.is_superuser
+        "is_superuser": request.user.is_superuser,
+        "groups": group_names,
+        "can_access_dashboard": can_access_dashboard,
     })

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
-from .permissions import IsSuperUser
+#from .permissions import IsSuperUser
 from threemt.models import ThreeMt
 from explearning.models import ExpLearning
 from home.models import Scores_Round_1
@@ -14,6 +14,10 @@ import xlsxwriter
 from django.http import HttpResponse
 from home.models import Students
 from django.db.models import Avg, Count, F, FloatField, ExpressionWrapper
+from rest_framework.permissions import IsAuthenticated
+from .permissions import IsDashboardUser
+from django.contrib.auth.models import Group
+from signup.models import User
 
 CATEGORY_MODEL_MAP = {
     '3mt': ThreeMt,
@@ -21,9 +25,26 @@ CATEGORY_MODEL_MAP = {
     'respost': Scores_Round_1
 }
 
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def me(request):
+    user = request.user
+    group_names = list(user.groups.values_list("name", flat=True))
+    can_access_dashboard = user.is_superuser or ("DashboardAccess" in group_names)
+
+    return Response({
+        "email": getattr(user, "email", ""),
+        "is_superuser": user.is_superuser,
+        "is_staff": user.is_staff,
+        "groups": group_names,
+        "can_access_dashboard": can_access_dashboard,
+    })
+
+
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
-@permission_classes([IsSuperUser])
+@permission_classes([IsDashboardUser])
 def sorted_scores_view(request):
     print("USER:", request.user)
     print("IS AUTHENTICATED:", request.user.is_authenticated)
@@ -80,7 +101,7 @@ def sorted_scores_view(request):
 
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
-@permission_classes([IsSuperUser])
+@permission_classes([IsDashboardUser])
 def category_scores_view(request):
     category = request.GET.get("category")
     model = CATEGORY_MODEL_MAP.get(category)
@@ -140,7 +161,7 @@ def category_scores_view(request):
 
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
-@permission_classes([IsSuperUser])
+@permission_classes([IsDashboardUser])
 def judge_progress(request):
     category = request.GET.get("category")
     model = CATEGORY_MODEL_MAP.get(category)
@@ -171,7 +192,7 @@ def judge_progress(request):
 
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
-@permission_classes([IsSuperUser])
+@permission_classes([IsDashboardUser])
 def student_judge_status(request):
     category = request.GET.get("category")
     required = int(request.GET.get("required", 4))  # dynamic
@@ -224,7 +245,7 @@ def student_judge_status(request):
 
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
-@permission_classes([IsSuperUser])
+@permission_classes([IsDashboardUser])
 def export_excel_view(request):
     category = request.GET.get("category")
     model = CATEGORY_MODEL_MAP.get(category)
@@ -280,7 +301,7 @@ def export_excel_view(request):
 
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
-@permission_classes([IsSuperUser])
+@permission_classes([IsDashboardUser])
 def category_aggregate_view(request):
     category = request.GET.get("category")
 
@@ -363,7 +384,7 @@ CATEGORY_RANGES = {
 
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
-@permission_classes([IsSuperUser])
+@permission_classes([IsDashboardUser])
 def judge_poster_status(request):
     category = request.GET.get("category")
     rng = CATEGORY_RANGES.get(category)
@@ -401,3 +422,4 @@ def judge_poster_status(request):
         })
 
     return Response(result)
+

@@ -10,19 +10,24 @@ from .models import (
 from signup.models import User
 from import_export.admin import ExportMixin
 from import_export import resources # Import the resources module
-
+from django.contrib.auth.models import Group
 
 class BaseExportAdmin(ExportMixin, admin.ModelAdmin):
     list_per_page = 25
 
 @admin.register(User)
 class UserAdmin(BaseExportAdmin):
-    list_display = ('email', 'is_staff', 'is_superuser')
+    list_display = ('email', 'is_staff', 'is_superuser','groups_list')
     list_display_links = ('email',)
-    list_filter = ('email',)
+    #list_filter = ('email',)
+    list_filter = ("is_staff", "is_superuser", "groups")
     search_fields = ('email',)
+    ordering = ('email',)
     list_per_page = 25
-
+    def groups_list(self, obj):
+        return ", ".join([group.name for group in obj.groups.all()])
+    
+    groups_list.short_description = "Groups"
 
 @admin.register(Students)
 class StudentsAdmin(BaseExportAdmin):

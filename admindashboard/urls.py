@@ -1,7 +1,10 @@
 from django.urls import path
+
+from admindashboard.auth_views import dashboard_signin
 from . import views
 
 urlpatterns = [
+    path("signin/", dashboard_signin),
     path('sorted_scores/', views.sorted_scores_view),
     path('category_scores/', views.category_scores_view),
     path('judge_progress/', views.judge_progress),
@@ -10,4 +13,5 @@ urlpatterns = [
     path('aggregate/', views.category_aggregate_view),
     path('judge_poster_status/',views.judge_poster_status),
     path("category_aggregate/", views.category_aggregate_view),
+    
 ]
