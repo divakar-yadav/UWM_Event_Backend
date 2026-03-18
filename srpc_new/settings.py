@@ -16,6 +16,41 @@ from pathlib import Path
 from rest_framework.renderers import JSONRenderer
 import pymysql
 from dotenv import load_dotenv
+import boto3
+import json
+from botocore.exceptions import ClientError
+import time
+
+
+def get_secret():
+    secret_name = "rds!db-c5b1ec3f-90b0-44f2-8c26-d193d4411365"
+    region_name = "us-east-1"
+
+    client = boto3.client("secretsmanager", region_name=region_name)
+
+    try:
+        response = client.get_secret_value(SecretId=secret_name)
+    except ClientError as e:
+        raise e
+
+    secret = json.loads(response["SecretString"])
+    return secret
+
+
+
+_secret_cache = None
+_last_fetch = 0
+
+def get_db_secret():
+    global _secret_cache, _last_fetch
+
+    if _secret_cache and time.time() - _last_fetch < 300:  # 5 min
+        return _secret_cache
+
+    _secret_cache = get_secret()
+    _last_fetch = time.time()
+    return _secret_cache
+
 #load_dotenv() # Load environment variables from .env file in the current directory
 load_dotenv("/home/ubuntu/.env") #production
 pymysql.install_as_MySQLdb()
@@ -115,7 +150,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'srpc_new.wsgi.application'
 
-
+secret = get_db_secret()
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -130,7 +165,8 @@ DATABASES = {
         
          'NAME': os.environ.get('DB_NAME'),
          'USER': os.environ.get('DB_USER'),
-     'PASSWORD': os.environ.get('DB_PASSWORD'),
+     #'PASSWORD': os.environ.get('DB_PASSWORD'), #for local testing
+     'PASSWORD': secret['password'],
          'HOST': os.environ.get('DB_HOST'),
         'CONN_MAX_AGE': 60,
     }
