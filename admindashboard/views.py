@@ -203,37 +203,43 @@ def judge_progress(request):
 @permission_classes([IsDashboardUser])
 def student_judge_status(request):
     category = request.GET.get("category")
-    required = int(request.GET.get("required", 4))  # dynamic
+    required = int(request.GET.get("required", 4))
     rng = CATEGORY_RANGES.get(category)
+
     if not rng:
         return Response({"error": "Invalid category"}, status=400)
 
     lo, hi = rng
+
     students = list(
         Students.objects.filter(poster_ID__gte=lo, poster_ID__lte=hi)
         .values("poster_ID", "Name")
         .order_by("poster_ID")
     )
 
-    # map poster -> distinct judge count
     if category == "respost":
-        counts = (Scores_Round_1.objects
-                  .filter(Student__poster_ID__gte=lo, Student__poster_ID__lte=hi)
-                  .values(poster_num=F("Student__poster_ID"))
-                  .annotate(scored=Count("judge", distinct=True)))
-        m = {c["Student__poster_ID"]: c["scored"] for c in counts}
+        counts = (
+            Scores_Round_1.objects
+            .filter(Student__poster_ID__gte=lo, Student__poster_ID__lte=hi)
+            .values(poster_num=F("Student__poster_ID"))
+            .annotate(scored=Count("judge", distinct=True))
+        )
     elif category == "exp":
-        counts = (ExpLearning.objects
-                  .filter(student__poster_ID__gte=lo, student__poster_ID__lte=hi)
-                  .values(poster_num=F("student__poster_ID"))
-                  .annotate(scored=Count("judge", distinct=True)))
-        m = {c["poster_num"]: c["scored"] for c in counts}
+        counts = (
+            ExpLearning.objects
+            .filter(student__poster_ID__gte=lo, student__poster_ID__lte=hi)
+            .values(poster_num=F("student__poster_ID"))
+            .annotate(scored=Count("judge", distinct=True))
+        )
     else:  # 3mt
-        counts = (ThreeMt.objects
-                  .filter(student__poster_ID__gte=lo, student__poster_ID__lte=hi)
-                  .values(poster_num=F("student__poster_ID"))
-                  .annotate(scored=Count("judge", distinct=True)))
-        m = {c["student__poster_ID"]: c["scored"] for c in counts}
+        counts = (
+            ThreeMt.objects
+            .filter(student__poster_ID__gte=lo, student__poster_ID__lte=hi)
+            .values(poster_num=F("student__poster_ID"))
+            .annotate(scored=Count("judge", distinct=True))
+        )
+
+    m = {c["poster_num"]: c["scored"] for c in counts}
 
     result = []
     for s in students:
